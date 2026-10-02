@@ -8,7 +8,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
 body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
 
-/* LOGIN */
 #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .login-box { background: #1a1a1a; padding: 50px; border-radius: 12px; box-shadow: 0 0 30px rgba(255,0,0,0.3); text-align: center; border: 1px solid #333; width: 350px; }
 .login-box h1 { color: #ff0000; font-size: 24px; margin-bottom: 5px; letter-spacing: 2px; }
@@ -18,7 +17,6 @@ body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; 
 .login-box button { width: 100%; padding: 12px; background: #ff0000; color: #fff; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
 .login-box button:hover { background: #cc0000; }
 
-/* PAINEL */
 #panel { display: none; width: 100%; height: 100%; }
 .sidebar { width: 260px; background: #151515; height: 100%; border-right: 2px solid #ff0000; display: flex; flex-direction: column; padding: 20px 0; overflow-y: auto; }
 .sidebar .logo { text-align: center; padding: 0 20px 20px; border-bottom: 1px solid #333; }
@@ -48,6 +46,10 @@ body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; 
 .btn-secondary:hover { background: #555; }
 .btn-danger { background: #8b0000; }
 .btn-danger:hover { background: #ff0000; }
+.btn-green { background: #00897b; }
+.btn-green:hover { background: #00c853; }
+.btn-copy { background: #1565c0; }
+.btn-copy:hover { background: #2196f3; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
@@ -64,11 +66,19 @@ tr:hover { background: #1f1f1f; }
 .badge-green { background: #00c853; color: #000; }
 .badge-red { background: #ff0000; color: #fff; }
 
-.banner-preview { width: 100%; height: 120px; background: #222; border: 2px dashed #555; border-radius: 8px; display: flex; justify-content: center; align-items: center; color: #555; font-size: 14px; margin-top: 10px; padding: 10px; text-align: center; }
+.banner-preview { width: 100%; height: 120px; background: #222; border: 2px dashed #555; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-size: 14px; margin-top: 10px; padding: 10px; text-align: center; }
 
 .stat-box { background: #1a1a1a; padding: 25px; border-radius: 10px; text-align: center; border-top: 4px solid #ff0000; }
 .stat-box h4 { color: #fff; font-size: 14px; margin-bottom: 10px; }
 .stat-box .num { font-size: 32px; color: #ff0000; font-weight: bold; }
+
+/* MODAL DE DADOS PARA COPIAR */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+.modal.active { display: flex; }
+.modal-content { background: #1a1a1a; padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; border: 2px solid #ff0000; max-height: 90vh; overflow-y: auto; }
+.modal-content h3 { color: #ff0000; margin-bottom: 15px; }
+.modal-content textarea { width: 100%; height: 350px; background: #0f0f0f; color: #00ff00; border: 1px solid #333; border-radius: 6px; padding: 15px; font-family: 'Courier New', monospace; font-size: 13px; resize: vertical; }
+.modal-content .btn { margin-top: 15px; }
 
 @media (max-width: 768px) {
 .sidebar { width: 60px; }
@@ -95,7 +105,7 @@ tr:hover { background: #1f1f1f; }
     <aside class="sidebar">
         <div class="logo">
             <h2>TV NOVA JUAREZ</h2>
-            <span>Painel ADM v2.0</span>
+            <span>Painel ADM v2.1</span>
         </div>
         <nav>
             <a class="active" onclick="abrirAba('dashboard', this)"><i>📊</i> <span>Dashboard</span></a>
@@ -133,7 +143,7 @@ tr:hover { background: #1f1f1f; }
             </div>
             <div class="card" style="margin-top:25px;">
                 <h3>Bem-vindo ao Painel TV NOVA JUAREZ</h3>
-                <p style="color:#aaa; line-height:1.6;">Todos os dados são salvos automaticamente no seu navegador. Você pode fechar e abrir quando quiser — tudo continuará aqui. Só sai se você clicar em <strong style="color:#ff0000;">Excluir</strong>.</p>
+                <p style="color:#aaa; line-height:1.6;">Todos os dados são salvos automaticamente. Use o botão <strong style="color:#2196f3;">📋 Copiar Dados</strong> em Clientes e Revendas para enviar as informações de acesso com todos os apps disponíveis.</p>
             </div>
         </div>
 
@@ -210,8 +220,8 @@ tr:hover { background: #1f1f1f; }
             <div class="card">
                 <h3>Adicionar Servidor DNS Externo</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Nome do Servidor</label><input type="text" id="srv-nome" placeholder="Ex: AtlasP"></div>
-                    <div class="form-group"><label>DNS / Host</label><input type="text" id="srv-dns" placeholder="https://atlasp.ink"></div>
+                    <div class="form-group"><label>Nome do Servidor</label><input type="text" id="srv-nome" placeholder="Ex: TV Nova Juarez"></div>
+                    <div class="form-group"><label>DNS / Host</label><input type="text" id="srv-dns" placeholder="http://tvnovajuarez.com:8080"></div>
                     <div class="form-group"><label>Usuário</label><input type="text" id="srv-user" placeholder="usuario123"></div>
                     <div class="form-group"><label>Senha</label><input type="text" id="srv-pass" placeholder="********"></div>
                 </div>
@@ -219,7 +229,8 @@ tr:hover { background: #1f1f1f; }
             </div>
             <div class="card">
                 <h3>Servidores Cadastrados (<span id="count-servidores">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>DNS</th><th>Usuário</th><th>Senha</th><th>Status</th><th>Ações</th></tr></thead>
+                <p style="color:#ffc107; font-size:12px; margin-bottom:10px;">⚠️ O servidor com <strong>"Principal"</strong> marcado é o que aparece nos dados de acesso enviados ao cliente/revenda.</p>
+                <table><thead><tr><th>ID</th><th>Nome</th><th>DNS</th><th>Usuário</th><th>Senha</th><th>Principal</th><th>Ações</th></tr></thead>
                 <tbody id="lista-servidores"></tbody></table>
             </div>
         </div>
@@ -240,6 +251,7 @@ tr:hover { background: #1f1f1f; }
             </div>
             <div class="card">
                 <h3>Aplicativos Cadastrados (<span id="count-apps">0</span>)</h3>
+                <p style="color:#ffc107; font-size:12px; margin-bottom:10px;">⚠️ Todos os apps cadastrados aqui aparecem automaticamente nos dados de acesso dos Clientes e Revendas.</p>
                 <table><thead><tr><th>ID</th><th>Nome</th><th>Plataforma</th><th>URL</th><th>Ações</th></tr></thead>
                 <tbody id="lista-apps"></tbody></table>
             </div>
@@ -282,7 +294,7 @@ tr:hover { background: #1f1f1f; }
             </div>
             <div class="card">
                 <h3>Clientes (<span id="count-clientes">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Senha</th><th>Ativação</th><th>Expira</th><th>WhatsApp</th><th>Ações</th></tr></thead>
+                <table><thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Senha</th><th>Ativação</th><th>Expira</th><th>Ações</th></tr></thead>
                 <tbody id="lista-clientes"></tbody></table>
             </div>
         </div>
@@ -339,7 +351,7 @@ tr:hover { background: #1f1f1f; }
                 <h3>Configurações do Servidor</h3>
                 <div class="grid-2">
                     <div class="form-group"><label>Nome do Servidor</label><input type="text" id="cfg-nome" value="TV NOVA JUAREZ"></div>
-                    <div class="form-group"><label>DNS Principal</label><input type="text" id="cfg-dns" placeholder="http://tvnovajuarez.com:8080"></div>
+                    <div class="form-group"><label>DNS Principal (para clientes)</label><input type="text" id="cfg-dns" placeholder="http://tvnovajuarez.com:8080"></div>
                     <div class="form-group"><label>WhatsApp Suporte</label><input type="text" id="cfg-whats" placeholder="5511999999999"></div>
                     <div class="form-group"><label>Grupo WhatsApp</label><input type="text" id="cfg-grupo" placeholder="https://chat.whatsapp.com/..."></div>
                     <div class="form-group"><label>Canal Telegram</label><input type="text" id="cfg-telegram" placeholder="https://t.me/..."></div>
@@ -353,19 +365,25 @@ tr:hover { background: #1f1f1f; }
     </main>
 </div>
 
+<!-- MODAL DE COPIAR DADOS -->
+<div class="modal" id="modal-copiar">
+    <div class="modal-content">
+        <h3>📋 Dados de Acesso (Copiar e Enviar)</h3>
+        <p style="color:#aaa; font-size:12px; margin-bottom:10px;">Copie o texto abaixo e envie para o cliente/revendedor pelo WhatsApp ou Telegram.</p>
+        <textarea id="texto-copiar" readonly></textarea>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+            <button class="btn btn-copy" onclick="copiarTexto()">📋 Copiar Texto</button>
+        </div>
+    </div>
+</div>
+
 <script>
-/* ============ BANCO DE DADOS LOCAL (localStorage) ============ */
+/* ============ BANCO DE DADOS LOCAL ============ */
 const DB = {
-    canais: 'tvnj_canais',
-    filmes: 'tvnj_filmes',
-    series: 'tvnj_series',
-    servidores: 'tvnj_servidores',
-    apps: 'tvnj_apps',
-    revendas: 'tvnj_revendas',
-    clientes: 'tvnj_clientes',
-    banners: 'tvnj_banners',
-    jogos: 'tvnj_jogos',
-    config: 'tvnj_config'
+    canais: 'tvnj_canais', filmes: 'tvnj_filmes', series: 'tvnj_series',
+    servidores: 'tvnj_servidores', apps: 'tvnj_apps', revendas: 'tvnj_revendas',
+    clientes: 'tvnj_clientes', banners: 'tvnj_banners', jogos: 'tvnj_jogos', config: 'tvnj_config'
 };
 
 function get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); }
@@ -472,7 +490,8 @@ function addServidor() {
     const pass = document.getElementById('srv-pass').value.trim();
     if (!nome || !dns) return alert('Preencha Nome e DNS!');
     const lista = get(DB.servidores);
-    lista.push({ id: Date.now(), nome, dns, user, pass, status: 'Ativo' });
+    const temPrincipal = lista.some(s => s.principal);
+    lista.push({ id: Date.now(), nome, dns, user, pass, status: 'Ativo', principal: !temPrincipal });
     set(DB.servidores, lista);
     document.getElementById('srv-nome').value = '';
     document.getElementById('srv-dns').value = '';
@@ -485,6 +504,12 @@ function delServidor(id) {
     if (!confirm('Excluir este servidor?')) return;
     set(DB.servidores, get(DB.servidores).filter(s => s.id !== id));
     renderTudo();
+}
+function marcarPrincipal(id) {
+    const lista = get(DB.servidores).map(s => ({...s, principal: s.id === id}));
+    set(DB.servidores, lista);
+    renderTudo();
+    alert('✅ Servidor marcado como principal!');
 }
 function testarServidor(id) {
     const s = get(DB.servidores).find(x => x.id === id);
@@ -562,6 +587,114 @@ function delCliente(id) {
     renderTudo();
 }
 
+/* ============ GERAR DADOS PARA COPIAR ============ */
+function gerarTextoAcesso(pessoa, tipo) {
+    const cfg = getConfig();
+    const servidores = get(DB.servidores);
+    const apps = get(DB.apps);
+    const servidorPrincipal = servidores.find(s => s.principal) || servidores[0];
+
+    const nomeServidor = cfg.nome || 'TV NOVA JUAREZ';
+    const dns = servidorPrincipal ? servidorPrincipal.dns : (cfg.dns || 'Não configurado');
+    const whats = cfg.whats || 'Não informado';
+    const grupo = cfg.grupo || 'Não informado';
+    const telegram = cfg.telegram || 'Não informado';
+    const loja = cfg.loja || '';
+
+    let texto = '';
+    texto += `╔══════════════════════════════╗\n`;
+    texto += `   🎬 ${nomeServidor.toUpperCase()} 🎬\n`;
+    texto += `   SEUS DADOS DE ACESSO\n`;
+    texto += `╚══════════════════════════════╝\n\n`;
+
+    texto += `👤 *Nome:* ${pessoa.nome}\n`;
+    texto += `🔑 *Usuário:* ${pessoa.user}\n`;
+    texto += `🔒 *Senha:* ${pessoa.pass}\n`;
+
+    if (tipo === 'cliente') {
+        texto += `📅 *Tipo:* ${pessoa.tipo || 'Mensal'}\n`;
+        if (pessoa.data) texto += `⏰ *Expira em:* ${pessoa.data}\n`;
+    } else {
+        texto += `📊 *Limite de Clientes:* ${pessoa.limite || 'Ilimitado'}\n`;
+    }
+
+    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `🌐 *SERVIDOR (DNS)*\n`;
+    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `${dns}\n\n`;
+
+    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `📱 *APLICATIVOS DISPONÍVEIS*\n`;
+    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    if (apps.length === 0) {
+        texto += `Nenhum aplicativo cadastrado ainda.\n`;
+    } else {
+        apps.forEach((app, i) => {
+            texto += `${i + 1}. *${app.nome}* (${app.plat})\n`;
+            texto += `   🔗 ${app.url}\n`;
+        });
+    }
+
+    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `📞 *SUPORTE*\n`;
+    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `💬 WhatsApp: ${whats}\n`;
+    if (grupo !== 'Não informado') texto += `👥 Grupo: ${grupo}\n`;
+    if (telegram !== 'Não informado') texto += `📢 Telegram: ${telegram}\n`;
+    if (loja) texto += `🛒 Loja de Apps: ${loja}\n`;
+
+    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `⚙️ *COMO CONFIGURAR*\n`;
+    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    texto += `1️⃣ Baixe um dos aplicativos acima\n`;
+    texto += `2️⃣ Escolha "Adicionar Playlist"\n`;
+    texto += `3️⃣ Selecione "Xtream Codes API"\n`;
+    texto += `4️⃣ Cole o DNS: ${dns}\n`;
+    texto += `5️⃣ Digite Usuário: ${pessoa.user}\n`;
+    texto += `6️⃣ Digite Senha: ${pessoa.pass}\n`;
+    texto += `7️⃣ Pronto! Bom entretenimento! 🍿\n\n`;
+
+    texto += `╔══════════════════════════════╗\n`;
+    texto += `   © ${nomeServidor}\n`;
+    texto += `╚══════════════════════════════╝`;
+
+    return texto;
+}
+
+function mostrarDadosCliente(id) {
+    const cliente = get(DB.clientes).find(c => c.id === id);
+    if (!cliente) return;
+    const texto = gerarTextoAcesso(cliente, 'cliente');
+    document.getElementById('texto-copiar').value = texto;
+    document.getElementById('modal-copiar').classList.add('active');
+}
+
+function mostrarDadosRevenda(id) {
+    const revenda = get(DB.revendas).find(r => r.id === id);
+    if (!revenda) return;
+    const texto = gerarTextoAcesso(revenda, 'revenda');
+    document.getElementById('texto-copiar').value = texto;
+    document.getElementById('modal-copiar').classList.add('active');
+}
+
+function copiarTexto() {
+    const textarea = document.getElementById('texto-copiar');
+    textarea.select();
+    textarea.setSelectionRange(0, 99999);
+    try {
+        document.execCommand('copy');
+        alert('✅ Dados copiados! Agora cole no WhatsApp e envie.');
+    } catch (e) {
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            alert('✅ Dados copiados! Agora cole no WhatsApp e envie.');
+        });
+    }
+}
+
+function fecharModal() {
+    document.getElementById('modal-copiar').classList.remove('active');
+}
+
 /* ============ BANNER ============ */
 function gerarBanner() {
     const nome = document.getElementById('bn-nome').value;
@@ -634,7 +767,7 @@ function salvarConfig() {
     alert('✅ Configurações salvas permanentemente!');
 }
 function limparTudo() {
-    if (!confirm('⚠️ ATENÇÃO! Isso apagará TODOS os dados salvos (canais, filmes, séries, clientes, etc). Continuar?')) return;
+    if (!confirm('⚠️ ATENÇÃO! Isso apagará TODOS os dados salvos. Continuar?')) return;
     if (!confirm('TEM CERTEZA? Essa ação não pode ser desfeita!')) return;
     Object.values(DB).forEach(k => localStorage.removeItem(k));
     alert('🗑️ Todos os dados foram apagados.');
@@ -673,7 +806,7 @@ function renderTudo() {
     document.getElementById('stat-servidores').innerText = servidores.length;
     document.getElementById('lista-servidores').innerHTML = servidores.length === 0
         ? '<tr><td colspan="7" style="text-align:center;color:#555;">Nenhum servidor cadastrado.</td></tr>'
-        : servidores.map(s => `<tr><td>${s.id}</td><td><strong>${s.nome}</strong></td><td>${s.dns}</td><td>${s.user}</td><td>${s.pass}</td><td><span class="badge badge-green">${s.status}</span></td><td><button class="btn btn-secondary" style="padding:5px 10px;font-size:11px;" onclick="testarServidor(${s.id})">Testar</button> <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delServidor(${s.id})">Excluir</button></td></tr>`).join('');
+        : servidores.map(s => `<tr><td>${s.id}</td><td><strong>${s.nome}</strong></td><td>${s.dns}</td><td>${s.user}</td><td>${s.pass}</td><td>${s.principal ? '<span class="badge badge-green">★ Principal</span>' : '<span class="badge badge-red">-</span>'}</td><td><button class="btn btn-secondary" style="padding:5px 10px;font-size:11px;" onclick="testarServidor(${s.id})">Testar</button> ${!s.principal ? `<button class="btn btn-green" style="padding:5px 10px;font-size:11px;" onclick="marcarPrincipal(${s.id})">★ Principal</button>` : ''} <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delServidor(${s.id})">Excluir</button></td></tr>`).join('');
 
     // APPS
     const apps = get(DB.apps);
@@ -688,15 +821,15 @@ function renderTudo() {
     document.getElementById('stat-revendas').innerText = revendas.length;
     document.getElementById('lista-revendas').innerHTML = revendas.length === 0
         ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum revendedor cadastrado.</td></tr>'
-        : revendas.map(r => `<tr><td>${r.id}</td><td>${r.nome}</td><td>${r.user}</td><td>${r.pass}</td><td>${r.limite}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delRevenda(${r.id})">Excluir</button></td></tr>`).join('');
+        : revendas.map(r => `<tr><td>${r.id}</td><td>${r.nome}</td><td>${r.user}</td><td>${r.pass}</td><td>${r.limite}</td><td><button class="btn btn-copy" style="padding:5px 10px;font-size:11px;" onclick="mostrarDadosRevenda(${r.id})">📋 Copiar Dados</button> <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delRevenda(${r.id})">Excluir</button></td></tr>`).join('');
 
     // CLIENTES
     const clientes = get(DB.clientes);
     document.getElementById('count-clientes').innerText = clientes.length;
     document.getElementById('stat-clientes').innerText = clientes.length;
     document.getElementById('lista-clientes').innerHTML = clientes.length === 0
-        ? '<tr><td colspan="8" style="text-align:center;color:#555;">Nenhum cliente cadastrado.</td></tr>'
-        : clientes.map(c => `<tr><td>${c.id}</td><td>${c.nome}</td><td>${c.user}</td><td>${c.pass}</td><td>${c.tipo}</td><td>${c.data}</td><td>${c.whats}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delCliente(${c.id})">Excluir</button></td></tr>`).join('');
+        ? '<tr><td colspan="7" style="text-align:center;color:#555;">Nenhum cliente cadastrado.</td></tr>'
+        : clientes.map(c => `<tr><td>${c.id}</td><td>${c.nome}</td><td>${c.user}</td><td>${c.pass}</td><td>${c.tipo}</td><td>${c.data}</td><td><button class="btn btn-copy" style="padding:5px 10px;font-size:11px;" onclick="mostrarDadosCliente(${c.id})">📋 Copiar Dados</button> <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delCliente(${c.id})">Excluir</button></td></tr>`).join('');
 
     // BANNERS
     const banners = get(DB.banners);
