@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV NOVA JUAREZ - Painel ADM</title>
+    <style>
+        /* ===== RESET E ESTILOS GLOBAIS ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
+
+        /* ===== TELA DE LOGIN ===== */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; display: flex; justify-content: center; align-items: center;
+            z-index: 1000; flex-direction: column;
+        }
+        .login-box {
+            background: #1a1a1a; padding: 50px; border-radius: 12px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); text-align: center;
+            border: 1px solid #333; width: 350px;
+        }
+        .login-box h1 { color: #ff0000; font-size: 24px; margin-bottom: 5px; letter-spacing: 2px; }
+        .login-box p { color: #888; font-size: 12px; margin-bottom: 30px; }
+        .login-box input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px;
+            border: 1px solid #333; background: #222; color: #fff; font-size: 14px;
+        }
+        .login-box input:focus { outline: none; border-color: #ff0000; }
+        .login-box button {
+            width: 100%; padding: 12px; background: #ff0000; color: #fff;
+            border: none; border-radius: 6px; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+        }
+        .login-box button:hover { background: #cc0000; }
+
+        /* ===== ESTRUTURA DO PAINEL ===== */
+        #panel { display: none; width: 100%; height: 100%; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background: #151515; height: 100%;
+            border-right: 2px solid #ff0000; display: flex; flex-direction: column;
+            padding: 20px 0; overflow-y: auto;
+        }
+        .sidebar .logo { text-align: center; padding: 0 20px 20px; border-bottom: 1px solid #333; }
+        .sidebar .logo h2 { color: #ff0000; font-size: 18px; letter-spacing: 1px; }
+        .sidebar .logo span { color: #888; font-size: 10px; }
+        .sidebar nav a {
+            display: flex; align-items: center; padding: 14px 25px;
+            color: #aaa; text-decoration: none; font-size: 14px;
+            transition: 0.2s; border-left: 4px solid transparent;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background: #1f1f1f; color: #fff; border-left-color: #ff0000;
+        }
+        .sidebar nav a i { margin-right: 12px; width: 20px; text-align: center; }
+
+        /* Conteúdo Principal */
+        .main-content { flex: 1; height: 100%; overflow-y: auto; padding: 30px; background: #0f0f0f; }
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px;
+        }
+        .header-top h1 { font-size: 22px; color: #fff; }
+        .header-top .user-info { display: flex; align-items: center; gap: 15px; }
+        .header-top .user-info span { color: #ff0000; font-weight: bold; }
+        .btn-logout {
+            background: #333; color: #fff; border: none; padding: 8px 15px;
+            border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 12px;
+        }
+        .btn-logout:hover { background: #ff0000; }
+
+        /* Cards e Formulários */
+        .card {
+            background: #1a1a1a; padding: 25px; border-radius: 10px;
+            border: 1px solid #2a2a2a; margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .card h3 { color: #ff0000; margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #aaa; font-size: 12px; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #333;
+            background: #222; color: #fff; font-size: 14px;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #ff0000; }
+        .btn {
+            background: #ff0000; color: #fff; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #cc0000; }
+        .btn-secondary { background: #333; }
+        .btn-secondary:hover { background: #555; }
+
+        /* Grid de Cards */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        
+        /* Tabela */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; font-size: 13px; }
+        th { background: #222; color: #ff0000; font-weight: bold; }
+        tr:hover { background: #1f1f1f; }
+
+        /* Abas */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .badge-green { background: #00c853; color: #000; }
+        .badge-red { background: #ff0000; color: #fff; }
+        .badge-yellow { background: #ffc107; color: #000; }
+
+        /* Banner Preview */
+        .banner-preview {
+            width: 100%; height: 120px; background: #222; border: 2px dashed #555;
+            border-radius: 8px; display: flex; justify-content: center; align-items: center;
+            color: #555; font-size: 14px; margin-top: 10px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .sidebar { width: 60px; }
+            .sidebar .logo h2, .sidebar .logo span, .sidebar nav a span { display: none; }
+            .sidebar nav a { justify-content: center; padding: 15px; }
+            .sidebar nav a i { margin: 0; font-size: 20px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TELA DE LOGIN ===== -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h1>TV NOVA JUAREZ</h1>
+            <p>SISTEMA DE GERENCIAMENTO IPTV</p>
+            <input type="text" id="user" placeholder="Usuário" value="admin">
+            <input type="password" id="pass" placeholder="Senha" value="admin">
+            <button onclick="fazerLogin()">ENTRAR NO PAINEL</button>
+            <p style="margin-top:15px; font-size:10px; color:#555;">Padrão: admin / admin</p>
+        </div>
+    </div>
+
+    <!-- ===== PAINEL PRINCIPAL ===== -->
+    <div id="panel">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>TV NOVA JUAREZ</h2>
+                <span>Painel ADM v1.0</span>
+            </div>
+            <nav>
+                <a href="#" class="active" onclick="abrirAba('dashboard', this)"><i>📊</i> <span>Dashboard</span></a>
+                <a href="#" onclick="abrirAba('canais', this)"><i>📺</i> <span>Canais</span></a>
+                <a href="#" onclick="abrirAba('filmes', this)"><i>🎬</i> <span>Filmes</span></a>
+                <a href="#" onclick="abrirAba('series', this)"><i>📽️</i> <span>Séries</span></a>
+                <a href="#" onclick="abrirAba('servidores', this)"><i>🌐</i> <span>Servidores DNS</span></a>
+                <a href="#" onclick="abrirAba('revenda', this)"><i>👥</i> <span>Revenda</span></a>
+                <a href="#" onclick="abrirAba('clientes', this)"><i>👤</i> <span>Clientes</span></a>
+                <a href="#" onclick="abrirAba('banner', this)"><i>🖼️</i> <span>Gerador Banner</span></a>
+                <a href="#" onclick="abrirAba('jogos', this)"><i>⚽</i> <span>Jogos do Dia</span></a>
+                <a href="#" onclick="abrirAba('config', this)"><i>⚙️</i> <span>Configurações</span></a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <div class="header-top">
+                <h1 id="titulo-pagina">Dashboard</h1>
+                <div class="user-info">
+                    <span>admin</span>
+                    <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+                </div>
+            </div>
+
+            <!-- ===== ABA DASHBOARD ===== -->
+            <div id="dashboard" class="tab-content active">
+                <div class="grid-3">
+                    <div class="card" style="text-align:center;">
+                        <h3 style="border:none; color:#fff;">📺 Canais</h3>
+                        <p style="font-size:30px; color:#ff0000; font-weight:bold;">0</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <h3 style="border:none; color:#fff;">🎬 Filmes</h3>
+                        <p style="font-size:30px; color:#ff0000; font-weight:bold;">0</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <h3 style="border:none; color:#fff;">👤 Clientes</h3>
+                        <p style="font-size:30px; color:#ff0000; font-weight:bold;">0</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Bem-vindo ao Painel TV NOVA JUAREZ</h3>
+                    <p style="color:#aaa; line-height:1.6;">Este é o seu centro de controle. Aqui você pode adicionar canais, filmes, séries, gerenciar servidores DNS externos, criar revendedores, clientes e muito mais.</p>
+                    <br>
+                    <p style="color:#ff0000; font-weight:bold;">⚠️ Servidor zerado. Adicione seus conteúdos nas abas ao lado.</p>
+                </div>
+            </div>
+
+            <!-- ===== ABA CANAIS ===== -->
+            <div id="canais" class="tab-content">
+                <div class="card">
+                    <h3>Adicionar Canal</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nome do Canal</label>
+                            <input type="text" placeholder="Ex: ESPN Brasil">
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select>
+                                <option>Esportes</option>
+                                <option>Filmes</option>
+                                <option>Séries</option>
+                                <option>Infantil</option>
+                                <option>Notícias</option>
+                                <option>Documentários</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>URL do Stream (TS, M3U8, MP4, MKV)</label>
+                            <input type="text" placeholder="http://servidor.com/canal.ts">
+                        </div>
+                        <div class="form-group">
+                            <label>Logo do Canal (URL)</label>
+                            <input type="text" placeholder="http://servidor.com/logo.png">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Canal adicionado com sucesso! (Simulação)')">➕ Adicionar Canal</button>
+                    <button class="btn btn-secondary" onclick="alert('Importação de lista M3U iniciada! (Simulação)')">📂 Importar Lista M3U</button>
+                </div>
+                <div class="card">
+                    <h3>Canais Cadastrados</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Formato</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align:center; color:#555;">Nenhum canal cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA FILMES ===== -->
+            <div id="filmes" class="tab-content">
+                <div class="card">
+                    <h3>Adicionar Filme</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Título do Filme</label>
+                            <input type="text" placeholder="Ex: Vingadores">
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select>
+                                <option>Ação</option>
+                                <option>Comédia</option>
+                                <option>Drama</option>
+                                <option>Terror</option>
+                                <option>Ficção</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>URL do Stream (MP4, MKV, TS)</label>
+                            <input type="text" placeholder="http://servidor.com/filme.mp4">
+                        </div>
+                        <div class="form-group">
+                            <label>Capa do Filme (URL)</label>
+                            <input type="text" placeholder="http://servidor.com/capa.jpg">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Filme adicionado com sucesso! (Simulação)')">➕ Adicionar Filme</button>
+                </div>
+                <div class="card">
+                    <h3>Filmes Cadastrados</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Título</th><th>Categoria</th><th>Formato</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align:center; color:#555;">Nenhum filme cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA SÉRIES ===== -->
+            <div id="series" class="tab-content">
+                <div class="card">
+                    <h3>Adicionar Série</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Título da Série</label>
+                            <input type="text" placeholder="Ex: Breaking Bad">
+                        </div>
+                        <div class="form-group">
+                            <label>Temporada</label>
+                            <input type="number" placeholder="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Episódio</label>
+                            <input type="number" placeholder="1">
+                        </div>
+                        <div class="form-group">
+                            <label>URL do Stream (MP4, MKV, TS)</label>
+                            <input type="text" placeholder="http://servidor.com/ep1.mp4">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Série adicionada com sucesso! (Simulação)')">➕ Adicionar Série</button>
+                </div>
+                <div class="card">
+                    <h3>Séries Cadastradas</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Título</th><th>Temporada</th><th>Episódio</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align:center; color:#555;">Nenhuma série cadastrada.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA SERVIDORES ===== -->
+            <div id="servidores" class="tab-content">
+                <div class="card">
+                    <h3>Adicionar Servidor DNS Externo</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nome do Servidor</label>
+                            <input type="text" placeholder="Ex: Servidor Principal">
+                        </div>
+                        <div class="form-group">
+                            <label>DNS / Host</label>
+                            <input type="text" placeholder="http://meuservidor.com:8080">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuário</label>
+                            <input type="text" placeholder="usuario123">
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" placeholder="********">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Servidor DNS adicionado! (Simulação)')">🌐 Adicionar Servidor</button>
+                </div>
+                <div class="card">
+                    <h3>Servidores Cadastrados</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Nome</th><th>DNS</th><th>Usuário</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align:center; color:#555;">Nenhum servidor externo cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA REVENDA ===== -->
+            <div id="revenda" class="tab-content">
+                <div class="card">
+                    <h3>Criar Revendedor</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nome do Revendedor</label>
+                            <input type="text" placeholder="Ex: João Silva">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuário</label>
+                            <input type="text" placeholder="joao_revenda">
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" placeholder="********">
+                        </div>
+                        <div class="form-group">
+                            <label>Limite de Clientes</label>
+                            <input type="number" placeholder="50">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Revendedor criado! (Simulação)')">👥 Criar Revenda</button>
+                </div>
+                <div class="card">
+                    <h3>Revendedores Cadastrados</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Clientes</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align:center; color:#555;">Nenhum revendedor cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA CLIENTES ===== -->
+            <div id="clientes" class="tab-content">
+                <div class="card">
+                    <h3>Criar Cliente</h3>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label>Nome do Cliente</label>
+                            <input type="text" placeholder="Ex: Maria Souza">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuário</label>
+                            <input type="text" placeholder="maria123">
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" placeholder="********">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Ativação</label>
+                            <select>
+                                <option>Teste 6 Horas</option>
+                                <option>Teste 24 Horas</option>
+                                <option>Mensal</option>
+                                <option>Anual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Expiração</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <input type="text" placeholder="5511999999999">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Cliente criado! (Simulação)')">👤 Criar Cliente</button>
+                    <button class="btn btn-secondary" onclick="alert('Link M3U gerado! (Simulação)')">🔗 Gerar Link M3U</button>
+                </div>
+                <div class="card">
+                    <h3>Clientes Cadastrados</h3>
+                    <table>
+                        <thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Expira em</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align:center; color:#555;">Nenhum cliente cadastrado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA BANNER ===== -->
+            <div id="banner" class="tab-content">
+                <div class="card">
+                    <h3>Gerador de Banner</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nome do Servidor</label>
+                            <input type="text" value="TV NOVA JUAREZ">
+                        </div>
+                        <div class="form-group">
+                            <label>Texto do Banner</label>
+                            <input type="text" placeholder="Ex: Melhor IPTV do Brasil">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp de Contato</label>
+                            <input type="text" placeholder="5511999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Link do Grupo</label>
+                            <input type="text" placeholder="https://chat.whatsapp.com/...">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Banner gerado! (Simulação)')">🖼️ Gerar Banner</button>
+                    <div class="banner-preview">Pré-visualização do Banner</div>
+                </div>
+            </div>
+
+            <!-- ===== ABA JOGOS ===== -->
+            <div id="jogos" class="tab-content">
+                <div class="card">
+                    <h3>Jogos do Dia</h3>
+                    <p style="color:#aaa; margin-bottom:15px;">Integração com API de Futebol para listar os jogos e seus respectivos canais.</p>
+                    <table>
+                        <thead><tr><th>Horário</th><th>Jogo</th><th>Canal</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td colspan="4" style="text-align:center; color:#555;">Nenhum jogo cadastrado hoje.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== ABA CONFIGURAÇÕES ===== -->
+            <div id="config" class="tab-content">
+                <div class="card">
+                    <h3>Configurações do Servidor</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nome do Servidor</label>
+                            <input type="text" value="TV NOVA JUAREZ">
+                        </div>
+                        <div class="form-group">
+                            <label>DNS Principal</label>
+                            <input type="text" placeholder="http://tvnovajuarez.com:8080">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp de Suporte</label>
+                            <input type="text" placeholder="5511999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Grupo do WhatsApp</label>
+                            <input type="text" placeholder="https://chat.whatsapp.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Canal do Telegram</label>
+                            <input type="text" placeholder="https://t.me/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Loja de Aplicativos (URL)</label>
+                            <input type="text" placeholder="http://loja.com/app.apk">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Configurações salvas! (Simulação)')">💾 Salvar Configurações</button>
+                </div>
+                <div class="card">
+                    <h3>Adicionar Outro Servidor DNS</h3>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label>DNS</label>
+                            <input type="text" placeholder="http://outroservidor.com:8080">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuário</label>
+                            <input type="text" placeholder="user">
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" placeholder="****">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="alert('Servidor externo adicionado! (Simulação)')">🌐 Adicionar Servidor</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // ===== LÓGICA DE LOGIN =====
+        function fazerLogin() {
+            const user = document.getElementById('user').value;
+            const pass = document.getElementById('pass').value;
+
+            if (user === 'admin' && pass === 'admin') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('panel').style.display = 'flex';
+            } else {
+                alert('Usuário ou senha incorretos! Use admin / admin');
+            }
+        }
+
+        // ===== LÓGICA DE LOGOUT =====
+        function fazerLogout() {
+            document.getElementById('panel').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('user').value = '';
+            document.getElementById('pass').value = '';
+        }
+
+        // ===== LÓGICA DE ABAS =====
+        function abrirAba(id, elemento) {
+            // Esconde todas as abas
+            const abas = document.querySelectorAll('.tab-content');
+            abas.forEach(aba => aba.classList.remove('active'));
+
+            // Mostra a aba clicada
+            document.getElementById(id).classList.add('active');
+
+            // Remove active de todos os links
+            const links = document.querySelectorAll('.sidebar nav a');
+            links.forEach(link => link.classList.remove('active'));
+
+            // Adiciona active no link clicado
+            elemento.classList.add('active');
+
+            // Atualiza o título
+            const titulos = {
+                'dashboard': 'Dashboard',
+                'canais': 'Gerenciar Canais',
+                'filmes': 'Gerenciar Filmes',
+                'series': 'Gerenciar Séries',
+                'servidores': 'Servidores DNS',
+                'revenda': 'Painel de Revenda',
+                'clientes': 'Painel de Clientes',
+                'banner': 'Gerador de Banner',
+                'jogos': 'Jogos do Dia',
+                'config': 'Configurações'
+            };
+            document.getElementById('titulo-pagina').innerText = titulos[id] || 'Painel';
+        }
+
+        // ===== PERMITIR ENTER NO LOGIN =====
+        document.getElementById('pass').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') fazerLogin();
+        });
+    </script>
+</body>
+</html>
