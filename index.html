@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TV NOVA JUAREZ - Painel ADM</title>
+<title>TV NOVA JUAREZ - Painel ADM v4.0</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
 body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
@@ -15,7 +15,6 @@ body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; 
 .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; font-size: 14px; }
 .login-box input:focus { outline: none; border-color: #ff0000; }
 .login-box button { width: 100%; padding: 12px; background: #ff0000; color: #fff; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-.login-box button:hover { background: #cc0000; }
 
 #panel { display: none; width: 100%; height: 100%; }
 .sidebar { width: 260px; background: #151515; height: 100%; border-right: 2px solid #ff0000; display: flex; flex-direction: column; padding: 20px 0; overflow-y: auto; }
@@ -32,14 +31,13 @@ body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; 
 .header-top .user-info { display: flex; align-items: center; gap: 15px; }
 .header-top .user-info span { color: #ff0000; font-weight: bold; }
 .btn-logout { background: #333; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-.btn-logout:hover { background: #ff0000; }
 
 .card { background: #1a1a1a; padding: 25px; border-radius: 10px; border: 1px solid #2a2a2a; margin-bottom: 25px; }
 .card h3 { color: #ff0000; margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; }
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; color: #aaa; font-size: 12px; margin-bottom: 5px; }
-.form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; font-size: 14px; }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: #ff0000; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; font-size: 14px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #ff0000; }
 .btn { background: #ff0000; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; margin-right: 5px; margin-top: 5px; }
 .btn:hover { background: #cc0000; }
 .btn-secondary { background: #333; }
@@ -54,6 +52,8 @@ body { background-color: #0f0f0f; color: #e0e0e0; display: flex; height: 100vh; 
 .btn-orange:hover { background: #ff9800; }
 .btn-blue { background: #0d47a1; }
 .btn-blue:hover { background: #1976d2; }
+.btn-yellow { background: #f9a825; color: #000; }
+.btn-yellow:hover { background: #ffc107; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
@@ -70,40 +70,44 @@ tr:hover { background: #1f1f1f; }
 .badge-green { background: #00c853; color: #000; }
 .badge-red { background: #ff0000; color: #fff; }
 .badge-yellow { background: #ffc107; color: #000; }
-
-.banner-preview { width: 100%; height: 120px; background: #222; border: 2px dashed #555; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-size: 14px; margin-top: 10px; padding: 10px; text-align: center; }
+.badge-blue { background: #1976d2; color: #fff; }
 
 .stat-box { background: #1a1a1a; padding: 25px; border-radius: 10px; text-align: center; border-top: 4px solid #ff0000; }
 .stat-box h4 { color: #fff; font-size: 14px; margin-bottom: 10px; }
 .stat-box .num { font-size: 32px; color: #ff0000; font-weight: bold; }
 
-/* MODAL */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
 .modal.active { display: flex; }
 .modal-content { background: #1a1a1a; padding: 30px; border-radius: 12px; width: 90%; max-width: 700px; border: 2px solid #ff0000; max-height: 90vh; overflow-y: auto; }
 .modal-content h3 { color: #ff0000; margin-bottom: 15px; }
 .modal-content textarea { width: 100%; height: 350px; background: #0f0f0f; color: #00ff00; border: 1px solid #333; border-radius: 6px; padding: 15px; font-family: 'Courier New', monospace; font-size: 13px; resize: vertical; }
 
-/* PLAYER */
 .player-container { background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-.player-container video { width: 100%; max-height: 500px; background: #000; display: block; }
+.player-container video, .player-container iframe { width: 100%; max-height: 500px; background: #000; display: block; border: none; }
 .player-info { padding: 15px; background: #111; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .player-info h4 { color: #fff; font-size: 16px; }
-.player-info .status { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.status { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 .status-ok { background: #00c853; color: #000; }
 .status-err { background: #ff0000; color: #fff; }
 .status-load { background: #ffc107; color: #000; }
-
 .player-controls { display: flex; gap: 10px; padding: 15px; background: #111; border-top: 1px solid #333; flex-wrap: wrap; }
 
-/* FILTROS */
 .filtros { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
 .filtros select, .filtros input { padding: 10px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; font-size: 13px; }
-.filtros select { min-width: 200px; }
-
-/* AÇÕES EM MASSA */
 .acoes-massa { display: flex; gap: 10px; margin: 15px 0; padding: 15px; background: #111; border-radius: 8px; border: 1px solid #333; flex-wrap: wrap; align-items: center; }
 .acoes-massa label { color: #aaa; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.import-box { background: #111; border: 2px dashed #ff0000; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.import-box h4 { color: #ff0000; margin-bottom: 15px; font-size: 16px; }
+.import-box textarea { width: 100%; height: 100px; background: #0f0f0f; color: #0f0; border: 1px solid #333; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 12px; resize: vertical; margin-bottom: 10px; }
+
+.plano-card { background: #1a1a1a; border-radius: 10px; padding: 25px; text-align: center; border: 2px solid #333; transition: 0.3s; }
+.plano-card:hover { border-color: #ff0000; transform: translateY(-5px); }
+.plano-card h3 { color: #ff0000; font-size: 22px; margin-bottom: 10px; }
+.plano-card .preco { font-size: 36px; color: #fff; font-weight: bold; margin: 15px 0; }
+.plano-card ul { list-style: none; margin: 20px 0; text-align: left; }
+.plano-card ul li { padding: 8px 0; color: #ccc; font-size: 13px; border-bottom: 1px solid #222; }
+.plano-card ul li::before { content: "✅ "; color: #00c853; }
 
 @media (max-width: 768px) {
 .sidebar { width: 60px; }
@@ -118,7 +122,7 @@ tr:hover { background: #1f1f1f; }
 <div id="login-screen">
     <div class="login-box">
         <h1>TV NOVA JUAREZ</h1>
-        <p>SISTEMA DE GERENCIAMENTO IPTV</p>
+        <p>SISTEMA DE GERENCIAMENTO IPTV v4.0</p>
         <input type="text" id="user" placeholder="Usuário" value="admin">
         <input type="password" id="pass" placeholder="Senha" value="admin">
         <button onclick="fazerLogin()">ENTRAR NO PAINEL</button>
@@ -130,20 +134,21 @@ tr:hover { background: #1f1f1f; }
     <aside class="sidebar">
         <div class="logo">
             <h2>TV NOVA JUAREZ</h2>
-            <span>Painel ADM v3.0</span>
+            <span>Painel v4.0 - Importador</span>
         </div>
         <nav>
             <a class="active" onclick="abrirAba('dashboard', this)"><i>📊</i> <span>Dashboard</span></a>
+            <a onclick="abrirAba('importar', this)"><i>⬇️</i> <span>Importar Conteúdo</span></a>
             <a onclick="abrirAba('player', this)"><i>▶️</i> <span>Player de Teste</span></a>
             <a onclick="abrirAba('canais', this)"><i>📺</i> <span>Canais</span></a>
             <a onclick="abrirAba('filmes', this)"><i>🎬</i> <span>Filmes</span></a>
             <a onclick="abrirAba('series', this)"><i>📽️</i> <span>Séries</span></a>
             <a onclick="abrirAba('categorias', this)"><i>📂</i> <span>Categorias</span></a>
             <a onclick="abrirAba('servidores', this)"><i>🌐</i> <span>Servidores DNS</span></a>
+            <a onclick="abrirAba('planos', this)"><i>💰</i> <span>Planos e Vendas</span></a>
             <a onclick="abrirAba('aplicativos', this)"><i>📱</i> <span>Aplicativos</span></a>
             <a onclick="abrirAba('revenda', this)"><i>👥</i> <span>Revenda</span></a>
             <a onclick="abrirAba('clientes', this)"><i>👤</i> <span>Clientes</span></a>
-            <a onclick="abrirAba('banner', this)"><i>🖼️</i> <span>Gerador Banner</span></a>
             <a onclick="abrirAba('jogos', this)"><i>⚽</i> <span>Jogos do Dia</span></a>
             <a onclick="abrirAba('config', this)"><i>⚙️</i> <span>Configurações</span></a>
         </nav>
@@ -165,12 +170,90 @@ tr:hover { background: #1f1f1f; }
                 <div class="stat-box"><h4>🎬 Filmes</h4><div class="num" id="stat-filmes">0</div></div>
                 <div class="stat-box"><h4>📽️ Séries</h4><div class="num" id="stat-series">0</div></div>
                 <div class="stat-box"><h4>📂 Categorias</h4><div class="num" id="stat-categorias">0</div></div>
-                <div class="stat-box"><h4>🌐 Servidores</h4><div class="num" id="stat-servidores">0</div></div>
                 <div class="stat-box"><h4>👤 Clientes</h4><div class="num" id="stat-clientes">0</div></div>
+                <div class="stat-box"><h4>💰 Vendas</h4><div class="num" id="stat-vendas">0</div></div>
             </div>
             <div class="card" style="margin-top:25px;">
-                <h3>Bem-vindo ao Painel TV NOVA JUAREZ v3.0</h3>
-                <p style="color:#aaa; line-height:1.6;">Use o <strong style="color:#2196f3;">▶️ Player de Teste</strong> para verificar se seus canais, filmes e séries estão funcionando. Use <strong style="color:#e65100;">📂 Categorias</strong> para organizar tudo.</p>
+                <h3>🚀 Novo em v4.0</h3>
+                <p style="color:#aaa; line-height:1.8;">
+                    ⬇️ <strong>Importador Automático:</strong> Cole uma URL M3U (AtlasP, Xtream, etc.) e ele puxa TODOS os canais, filmes e séries de uma vez.<br>
+                    ▶️ <strong>Player YouTube:</strong> Adicione vídeos do YouTube direto no painel.<br>
+                    💰 <strong>Planos de Venda:</strong> Crie teste grátis, mensal e anual com cálculo automático de expiração.
+                </p>
+            </div>
+        </div>
+
+        <!-- IMPORTAR CONTEÚDO -->
+        <div id="importar" class="tab-content">
+            <div class="card">
+                <h3>⬇️ Importador de Conteúdo Automático</h3>
+                <p style="color:#aaa; font-size:13px; margin-bottom:20px;">Cole abaixo o link M3U da sua fonte (AtlasP, Xtream Codes, etc.). O sistema vai baixar, separar por categorias e adicionar tudo automaticamente.</p>
+
+                <div class="import-box">
+                    <h4>🌐 Importar Lista M3U (AtlasP, Xtream, Servidor Externo)</h4>
+                    <div class="form-group">
+                        <label>Link M3U Completo</label>
+                        <input type="text" id="import-m3u-url" placeholder="Ex: https://atlasp.ink/get.php?username=942429611&password=733297278&type=m3u_plus" style="width:100%;">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Conteúdo</label>
+                        <select id="import-m3u-tipo">
+                            <option value="auto">🔍 Detectar automaticamente</option>
+                            <option value="canais">📺 Apenas Canais</option>
+                            <option value="filmes">🎬 Apenas Filmes</option>
+                            <option value="series">📽️ Apenas Séries</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="importarM3U()">⬇️ IMPORTAR M3U AGORA</button>
+                    <button class="btn btn-secondary" onclick="colarAtlasP()">📋 Colar AtlasP (exemplo)</button>
+                </div>
+
+                <div class="import-box">
+                    <h4>📥 Importar Coleção M3U (colar conteúdo do arquivo)</h4>
+                    <p style="color:#888; font-size:12px; margin-bottom:10px;">Se o link M3U não funcionar por causa de CORS, abra a URL no navegador, copie TODO o conteúdo (Ctrl+A, Ctrl+C), cole aqui:</p>
+                    <textarea id="import-m3u-texto" placeholder="#EXTM3U&#10;#EXTINF:-1 tvg-logo=&quot;...&quot; group-title=&quot;Esportes&quot;,ESPN Brasil&#10;http://servidor.com/espn.ts&#10;..."></textarea>
+                    <button class="btn" onclick="importarM3UTexto()">📥 IMPORTAR TEXTO M3U</button>
+                </div>
+
+                <div class="import-box">
+                    <h4>▶️ Importar do YouTube</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Link do YouTube</label>
+                            <input type="text" id="import-yt-url" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                        <div class="form-group">
+                            <label>Nome do Conteúdo</label>
+                            <input type="text" id="import-yt-nome" placeholder="Ex: Show ao Vivo">
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <input type="text" id="import-yt-cat" placeholder="Ex: Variedades">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="import-yt-tipo">
+                                <option value="canais">📺 Canal</option>
+                                <option value="filmes">🎬 Filme</option>
+                                <option value="series">📽️ Série</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="importarYouTube()">▶️ IMPORTAR YOUTUBE</button>
+                </div>
+
+                <div class="import-box">
+                    <h4>🔗 Adicionar URL Direta (MP4, MKV, M3U8, TS, HLS)</h4>
+                    <div class="grid-2">
+                        <div class="form-group"><label>URL do Stream</label><input type="text" id="import-url-dir" placeholder="http://servidor.com/video.mp4"></div>
+                        <div class="form-group"><label>Nome</label><input type="text" id="import-nome-dir" placeholder="Nome do conteúdo"></div>
+                        <div class="form-group"><label>Categoria</label><input type="text" id="import-cat-dir" placeholder="Ex: Ação"></div>
+                        <div class="form-group"><label>Tipo</label>
+                            <select id="import-tipo-dir"><option value="canais">📺 Canal</option><option value="filmes">🎬 Filme</option><option value="series">📽️ Série</option></select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="importarUrlDireta()">🔗 ADICIONAR URL DIRETA</button>
+                </div>
             </div>
         </div>
 
@@ -178,8 +261,6 @@ tr:hover { background: #1f1f1f; }
         <div id="player" class="tab-content">
             <div class="card">
                 <h3>▶️ Player de Teste - Verificar Funcionamento</h3>
-                <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Escolha uma categoria e clique em ▶️ para testar. Use os botões "◀️ Anterior" e "Próximo ▶️" para passar pelos itens.</p>
-
                 <div class="filtros">
                     <select id="player-tipo" onchange="carregarItensPlayer()">
                         <option value="canais">📺 Canais</option>
@@ -195,7 +276,9 @@ tr:hover { background: #1f1f1f; }
                 </div>
 
                 <div class="player-container">
-                    <video id="video-player" controls></video>
+                    <div id="player-wrapper">
+                        <video id="video-player" controls></video>
+                    </div>
                     <div class="player-info">
                         <h4 id="player-nome">Nenhum item selecionado</h4>
                         <span class="status" id="player-status">Aguardando...</span>
@@ -207,12 +290,9 @@ tr:hover { background: #1f1f1f; }
                         <button class="btn btn-orange" onclick="testarTodos()">🔍 Testar Todos</button>
                     </div>
                 </div>
-
-                <div class="card" style="background:#111; margin-top:20px;">
+                <div class="card" style="background:#111;">
                     <h3>📊 Resultado dos Testes</h3>
-                    <div id="resultado-testes" style="font-size:13px; color:#aaa;">
-                        Clique em "🔍 Testar Todos" para verificar todos os itens da categoria selecionada.
-                    </div>
+                    <div id="resultado-testes" style="font-size:13px; color:#aaa;">Clique em "🔍 Testar Todos" para verificar todos os itens.</div>
                 </div>
             </div>
         </div>
@@ -220,100 +300,89 @@ tr:hover { background: #1f1f1f; }
         <!-- CANAIS -->
         <div id="canais" class="tab-content">
             <div class="card">
-                <h3>Adicionar Canal</h3>
+                <h3>Adicionar Canal Manualmente</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Nome do Canal</label><input type="text" id="canal-nome" placeholder="Ex: ESPN Brasil"></div>
-                    <div class="form-group"><label>Categoria</label>
-                        <select id="canal-cat"></select>
-                    </div>
-                    <div class="form-group"><label>URL do Stream (TS, M3U8, MP4, MKV)</label><input type="text" id="canal-url" placeholder="http://servidor.com/canal.ts"></div>
-                    <div class="form-group"><label>Logo (URL)</label><input type="text" id="canal-logo" placeholder="http://servidor.com/logo.png"></div>
+                    <div class="form-group"><label>Nome</label><input type="text" id="canal-nome" placeholder="Ex: ESPN"></div>
+                    <div class="form-group"><label>Categoria</label><select id="canal-cat"></select></div>
+                    <div class="form-group"><label>URL (TS, M3U8, MP4, MKV)</label><input type="text" id="canal-url"></div>
+                    <div class="form-group"><label>Logo (URL)</label><input type="text" id="canal-logo"></div>
                 </div>
                 <button class="btn" onclick="addCanal()">➕ Adicionar Canal</button>
             </div>
             <div class="card">
-                <h3>Canais Cadastrados (<span id="count-canais">0</span>)</h3>
+                <h3>Canais (<span id="count-canais">0</span>)</h3>
                 <div class="filtros">
-                    <select id="filtro-cat-canais" onchange="renderCanais()">
-                        <option value="">Todas as categorias</option>
-                    </select>
-                    <input type="text" id="busca-canais" placeholder="🔍 Buscar canal..." oninput="renderCanais()" style="flex:1;">
+                    <select id="filtro-cat-canais" onchange="renderCanais()"><option value="">Todas as categorias</option></select>
+                    <input type="text" id="busca-canais" placeholder="🔍 Buscar..." oninput="renderCanais()" style="flex:1;">
                 </div>
                 <div class="acoes-massa">
                     <label><input type="checkbox" id="marcar-todos-canais" onchange="marcarTodos('canais', this.checked)"> Marcar Todos</label>
                     <button class="btn btn-orange" onclick="excluirMarcados('canais')">🗑️ Excluir Marcados</button>
-                    <button class="btn btn-danger" onclick="excluirCategoria('canais')">📂 Excluir Categoria Inteira</button>
+                    <button class="btn btn-danger" onclick="excluirCategoria('canais')">📂 Excluir Categoria</button>
+                    <button class="btn btn-yellow" onclick="excluirTodos('canais')">⚠️ Excluir TODOS os Canais</button>
                 </div>
-                <table>
-                    <thead><tr><th style="width:40px;">✓</th><th>ID</th><th>Nome</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="lista-canais"></tbody>
-                </table>
+                <table><thead><tr><th style="width:40px;">✓</th><th>Nome</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="lista-canais"></tbody></table>
             </div>
         </div>
 
         <!-- FILMES -->
         <div id="filmes" class="tab-content">
             <div class="card">
-                <h3>Adicionar Filme</h3>
+                <h3>Adicionar Filme Manualmente</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Título</label><input type="text" id="filme-nome" placeholder="Ex: Vingadores"></div>
+                    <div class="form-group"><label>Título</label><input type="text" id="filme-nome"></div>
                     <div class="form-group"><label>Categoria</label><select id="filme-cat"></select></div>
-                    <div class="form-group"><label>URL do Stream (MP4, MKV, TS)</label><input type="text" id="filme-url" placeholder="http://servidor.com/filme.mp4"></div>
-                    <div class="form-group"><label>Capa (URL)</label><input type="text" id="filme-capa" placeholder="http://servidor.com/capa.jpg"></div>
+                    <div class="form-group"><label>URL</label><input type="text" id="filme-url"></div>
+                    <div class="form-group"><label>Capa</label><input type="text" id="filme-capa"></div>
                 </div>
                 <button class="btn" onclick="addFilme()">➕ Adicionar Filme</button>
             </div>
             <div class="card">
-                <h3>Filmes Cadastrados (<span id="count-filmes">0</span>)</h3>
+                <h3>Filmes (<span id="count-filmes">0</span>)</h3>
                 <div class="filtros">
-                    <select id="filtro-cat-filmes" onchange="renderFilmes()">
-                        <option value="">Todas as categorias</option>
-                    </select>
-                    <input type="text" id="busca-filmes" placeholder="🔍 Buscar filme..." oninput="renderFilmes()" style="flex:1;">
+                    <select id="filtro-cat-filmes" onchange="renderFilmes()"><option value="">Todas as categorias</option></select>
+                    <input type="text" id="busca-filmes" placeholder="🔍 Buscar..." oninput="renderFilmes()" style="flex:1;">
                 </div>
                 <div class="acoes-massa">
                     <label><input type="checkbox" id="marcar-todos-filmes" onchange="marcarTodos('filmes', this.checked)"> Marcar Todos</label>
                     <button class="btn btn-orange" onclick="excluirMarcados('filmes')">🗑️ Excluir Marcados</button>
-                    <button class="btn btn-danger" onclick="excluirCategoria('filmes')">📂 Excluir Categoria Inteira</button>
+                    <button class="btn btn-danger" onclick="excluirCategoria('filmes')">📂 Excluir Categoria</button>
+                    <button class="btn btn-yellow" onclick="excluirTodos('filmes')">⚠️ Excluir TODOS os Filmes</button>
                 </div>
-                <table>
-                    <thead><tr><th style="width:40px;">✓</th><th>ID</th><th>Título</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="lista-filmes"></tbody>
-                </table>
+                <table><thead><tr><th style="width:40px;">✓</th><th>Título</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="lista-filmes"></tbody></table>
             </div>
         </div>
 
         <!-- SÉRIES -->
         <div id="series" class="tab-content">
             <div class="card">
-                <h3>Adicionar Série</h3>
+                <h3>Adicionar Série Manualmente</h3>
                 <div class="grid-3">
-                    <div class="form-group"><label>Título</label><input type="text" id="serie-nome" placeholder="Ex: Breaking Bad"></div>
-                    <div class="form-group"><label>Temporada</label><input type="number" id="serie-temp" placeholder="1"></div>
-                    <div class="form-group"><label>Episódio</label><input type="number" id="serie-ep" placeholder="1"></div>
+                    <div class="form-group"><label>Título</label><input type="text" id="serie-nome"></div>
+                    <div class="form-group"><label>Temp</label><input type="number" id="serie-temp"></div>
+                    <div class="form-group"><label>Ep</label><input type="number" id="serie-ep"></div>
                     <div class="form-group"><label>Categoria</label><select id="serie-cat"></select></div>
-                    <div class="form-group"><label>URL do Stream</label><input type="text" id="serie-url" placeholder="http://servidor.com/ep1.mp4"></div>
-                    <div class="form-group"><label>Capa (URL)</label><input type="text" id="serie-capa" placeholder="http://servidor.com/capa.jpg"></div>
+                    <div class="form-group"><label>URL</label><input type="text" id="serie-url"></div>
+                    <div class="form-group"><label>Capa</label><input type="text" id="serie-capa"></div>
                 </div>
                 <button class="btn" onclick="addSerie()">➕ Adicionar Série</button>
             </div>
             <div class="card">
-                <h3>Séries Cadastradas (<span id="count-series">0</span>)</h3>
+                <h3>Séries (<span id="count-series">0</span>)</h3>
                 <div class="filtros">
-                    <select id="filtro-cat-series" onchange="renderSeries()">
-                        <option value="">Todas as categorias</option>
-                    </select>
-                    <input type="text" id="busca-series" placeholder="🔍 Buscar série..." oninput="renderSeries()" style="flex:1;">
+                    <select id="filtro-cat-series" onchange="renderSeries()"><option value="">Todas as categorias</option></select>
+                    <input type="text" id="busca-series" placeholder="🔍 Buscar..." oninput="renderSeries()" style="flex:1;">
                 </div>
                 <div class="acoes-massa">
                     <label><input type="checkbox" id="marcar-todos-series" onchange="marcarTodos('series', this.checked)"> Marcar Todos</label>
                     <button class="btn btn-orange" onclick="excluirMarcados('series')">🗑️ Excluir Marcados</button>
-                    <button class="btn btn-danger" onclick="excluirCategoria('series')">📂 Excluir Categoria Inteira</button>
+                    <button class="btn btn-danger" onclick="excluirCategoria('series')">📂 Excluir Categoria</button>
+                    <button class="btn btn-yellow" onclick="excluirTodos('series')">⚠️ Excluir TODAS as Séries</button>
                 </div>
-                <table>
-                    <thead><tr><th style="width:40px;">✓</th><th>ID</th><th>Título</th><th>Temp</th><th>Ep</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="lista-series"></tbody>
-                </table>
+                <table><thead><tr><th style="width:40px;">✓</th><th>Título</th><th>Temp</th><th>Ep</th><th>Categoria</th><th>URL</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="lista-series"></tbody></table>
             </div>
         </div>
 
@@ -321,48 +390,89 @@ tr:hover { background: #1f1f1f; }
         <div id="categorias" class="tab-content">
             <div class="card">
                 <h3>📂 Gerenciar Categorias</h3>
-                <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Adicione, veja e exclua categorias de Canais, Filmes e Séries.</p>
                 <div class="grid-3">
                     <div class="form-group"><label>Tipo</label>
                         <select id="cat-tipo"><option value="canais">📺 Canais</option><option value="filmes">🎬 Filmes</option><option value="series">📽️ Séries</option></select>
                     </div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Nome da Categoria</label><input type="text" id="cat-nome" placeholder="Ex: Esportes, Ação, Anime..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Nome</label><input type="text" id="cat-nome"></div>
                 </div>
-                <button class="btn" onclick="addCategoria()">➕ Adicionar Categoria</button>
+                <button class="btn" onclick="addCategoria()">➕ Adicionar</button>
             </div>
-
             <div class="grid-3">
-                <div class="card">
-                    <h3>📺 Categorias de Canais (<span id="count-cat-canais">0</span>)</h3>
-                    <table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-canais"></tbody></table>
-                </div>
-                <div class="card">
-                    <h3>🎬 Categorias de Filmes (<span id="count-cat-filmes">0</span>)</h3>
-                    <table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-filmes"></tbody></table>
-                </div>
-                <div class="card">
-                    <h3>📽️ Categorias de Séries (<span id="count-cat-series">0</span>)</h3>
-                    <table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-series"></tbody></table>
-                </div>
+                <div class="card"><h3>📺 Canais (<span id="count-cat-canais">0</span>)</h3><table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-canais"></tbody></table></div>
+                <div class="card"><h3>🎬 Filmes (<span id="count-cat-filmes">0</span>)</h3><table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-filmes"></tbody></table></div>
+                <div class="card"><h3>📽️ Séries (<span id="count-cat-series">0</span>)</h3><table><thead><tr><th>Nome</th><th>Itens</th><th>Ações</th></tr></thead><tbody id="lista-cat-series"></tbody></table></div>
             </div>
         </div>
 
         <!-- SERVIDORES -->
         <div id="servidores" class="tab-content">
             <div class="card">
-                <h3>Adicionar Servidor DNS Externo</h3>
+                <h3>Adicionar Servidor DNS</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Nome do Servidor</label><input type="text" id="srv-nome" placeholder="Ex: TV Nova Juarez"></div>
-                    <div class="form-group"><label>DNS / Host</label><input type="text" id="srv-dns" placeholder="http://tvnovajuarez.com:8080"></div>
-                    <div class="form-group"><label>Usuário</label><input type="text" id="srv-user" placeholder="usuario123"></div>
-                    <div class="form-group"><label>Senha</label><input type="text" id="srv-pass" placeholder="********"></div>
+                    <div class="form-group"><label>Nome</label><input type="text" id="srv-nome" placeholder="AtlasP"></div>
+                    <div class="form-group"><label>DNS</label><input type="text" id="srv-dns" placeholder="https://atlasp.ink"></div>
+                    <div class="form-group"><label>Usuário</label><input type="text" id="srv-user"></div>
+                    <div class="form-group"><label>Senha</label><input type="text" id="srv-pass"></div>
                 </div>
-                <button class="btn" onclick="addServidor()">🌐 Adicionar Servidor</button>
+                <button class="btn" onclick="addServidor()">🌐 Adicionar</button>
             </div>
             <div class="card">
-                <h3>Servidores Cadastrados (<span id="count-servidores">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>DNS</th><th>Usuário</th><th>Senha</th><th>Principal</th><th>Ações</th></tr></thead>
+                <h3>Servidores (<span id="count-servidores">0</span>)</h3>
+                <table><thead><tr><th>Nome</th><th>DNS</th><th>Usuário</th><th>Senha</th><th>Principal</th><th>Ações</th></tr></thead>
                 <tbody id="lista-servidores"></tbody></table>
+            </div>
+        </div>
+
+        <!-- PLANOS E VENDAS -->
+        <div id="planos" class="tab-content">
+            <div class="card">
+                <h3>💰 Planos de Venda</h3>
+                <div class="grid-3">
+                    <div class="plano-card">
+                        <h3>🆓 TESTE GRÁTIS</h3>
+                        <div class="preco">R$ 0</div>
+                        <ul>
+                            <li>6 horas de teste</li>
+                            <li>Acesso a todos os canais</li>
+                            <li>1 dispositivo</li>
+                        </ul>
+                        <button class="btn btn-green" onclick="gerarTesteGratis()">🎁 GERAR TESTE</button>
+                    </div>
+                    <div class="plano-card">
+                        <h3>📅 MENSAL</h3>
+                        <div class="preco">R$ 30</div>
+                        <ul>
+                            <li>30 dias de acesso</li>
+                            <li>Todos os canais + filmes + séries</li>
+                            <li>Suporte via WhatsApp</li>
+                        </ul>
+                        <button class="btn" onclick="gerarPlano('mensal')">💳 ATIVAR MENSAL</button>
+                    </div>
+                    <div class="plano-card">
+                        <h3>📆 ANUAL</h3>
+                        <div class="preco">R$ 300</div>
+                        <ul>
+                            <li>365 dias de acesso</li>
+                            <li>Economia de R$ 60</li>
+                            <li>Suporte VIP</li>
+                        </ul>
+                        <button class="btn btn-orange" onclick="gerarPlano('anual')">💎 ATIVAR ANUAL</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>🎁 Gerar Teste Grátis (a partir de Cliente)</h3>
+                <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Escolha um cliente abaixo para gerar/renovar o acesso:</p>
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <select id="plano-cliente"></select>
+                </div>
+                <div class="grid-3">
+                    <button class="btn btn-green" onclick="ativarPlano('teste')">🆓 Ativar Teste 6h</button>
+                    <button class="btn" onclick="ativarPlano('mensal')">📅 Ativar Mensal</button>
+                    <button class="btn btn-orange" onclick="ativarPlano('anual')">📆 Ativar Anual</button>
+                </div>
             </div>
         </div>
 
@@ -371,18 +481,18 @@ tr:hover { background: #1f1f1f; }
             <div class="card">
                 <h3>Adicionar Aplicativo</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Nome do Aplicativo</label><input type="text" id="app-nome" placeholder="Ex: IPTV Smarters"></div>
-                    <div class="form-group"><label>URL de Download</label><input type="text" id="app-url" placeholder="http://loja.com/app.apk"></div>
+                    <div class="form-group"><label>Nome</label><input type="text" id="app-nome"></div>
+                    <div class="form-group"><label>URL</label><input type="text" id="app-url"></div>
                     <div class="form-group"><label>Plataforma</label>
-                        <select id="app-plataforma"><option>Android</option><option>iOS</option><option>Windows</option><option>Smart TV</option><option>TV Box</option></select>
+                        <select id="app-plataforma"><option>Android</option><option>iOS</option><option>Windows</option><option>Smart TV</option></select>
                     </div>
-                    <div class="form-group"><label>Ícone (URL)</label><input type="text" id="app-icone" placeholder="http://servidor.com/icon.png"></div>
+                    <div class="form-group"><label>Ícone</label><input type="text" id="app-icone"></div>
                 </div>
-                <button class="btn" onclick="addApp()">📱 Adicionar Aplicativo</button>
+                <button class="btn" onclick="addApp()">📱 Adicionar</button>
             </div>
             <div class="card">
-                <h3>Aplicativos Cadastrados (<span id="count-apps">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>Plataforma</th><th>URL</th><th>Ações</th></tr></thead>
+                <h3>Aplicativos (<span id="count-apps">0</span>)</h3>
+                <table><thead><tr><th>Nome</th><th>Plataforma</th><th>URL</th><th>Ações</th></tr></thead>
                 <tbody id="lista-apps"></tbody></table>
             </div>
         </div>
@@ -392,16 +502,16 @@ tr:hover { background: #1f1f1f; }
             <div class="card">
                 <h3>Criar Revendedor</h3>
                 <div class="grid-2">
-                    <div class="form-group"><label>Nome</label><input type="text" id="rev-nome" placeholder="Ex: João Silva"></div>
-                    <div class="form-group"><label>Usuário</label><input type="text" id="rev-user" placeholder="joao_revenda"></div>
-                    <div class="form-group"><label>Senha</label><input type="text" id="rev-pass" placeholder="********"></div>
-                    <div class="form-group"><label>Limite de Clientes</label><input type="number" id="rev-limite" placeholder="50"></div>
+                    <div class="form-group"><label>Nome</label><input type="text" id="rev-nome"></div>
+                    <div class="form-group"><label>Usuário</label><input type="text" id="rev-user"></div>
+                    <div class="form-group"><label>Senha</label><input type="text" id="rev-pass"></div>
+                    <div class="form-group"><label>Limite</label><input type="number" id="rev-limite"></div>
                 </div>
-                <button class="btn" onclick="addRevenda()">👥 Criar Revenda</button>
+                <button class="btn" onclick="addRevenda()">👥 Criar</button>
             </div>
             <div class="card">
                 <h3>Revendedores (<span id="count-revendas">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Senha</th><th>Limite</th><th>Ações</th></tr></thead>
+                <table><thead><tr><th>Nome</th><th>Usuário</th><th>Senha</th><th>Limite</th><th>Ações</th></tr></thead>
                 <tbody id="lista-revendas"></tbody></table>
             </div>
         </div>
@@ -411,65 +521,40 @@ tr:hover { background: #1f1f1f; }
             <div class="card">
                 <h3>Criar Cliente</h3>
                 <div class="grid-3">
-                    <div class="form-group"><label>Nome</label><input type="text" id="cli-nome" placeholder="Ex: Maria Souza"></div>
-                    <div class="form-group"><label>Usuário</label><input type="text" id="cli-user" placeholder="maria123"></div>
-                    <div class="form-group"><label>Senha</label><input type="text" id="cli-pass" placeholder="********"></div>
-                    <div class="form-group"><label>Ativação</label>
+                    <div class="form-group"><label>Nome</label><input type="text" id="cli-nome"></div>
+                    <div class="form-group"><label>Usuário</label><input type="text" id="cli-user"></div>
+                    <div class="form-group"><label>Senha</label><input type="text" id="cli-pass"></div>
+                    <div class="form-group"><label>Plano</label>
                         <select id="cli-tipo"><option>Teste 6 Horas</option><option>Teste 24 Horas</option><option>Mensal</option><option>Anual</option></select>
                     </div>
                     <div class="form-group"><label>Expira em</label><input type="date" id="cli-data"></div>
-                    <div class="form-group"><label>WhatsApp</label><input type="text" id="cli-whats" placeholder="5511999999999"></div>
+                    <div class="form-group"><label>WhatsApp</label><input type="text" id="cli-whats"></div>
                 </div>
                 <button class="btn" onclick="addCliente()">👤 Criar Cliente</button>
             </div>
             <div class="card">
                 <h3>Clientes (<span id="count-clientes">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>Usuário</th><th>Senha</th><th>Ativação</th><th>Expira</th><th>Ações</th></tr></thead>
+                <table><thead><tr><th>Nome</th><th>Usuário</th><th>Senha</th><th>Plano</th><th>Expira</th><th>Ações</th></tr></thead>
                 <tbody id="lista-clientes"></tbody></table>
-            </div>
-        </div>
-
-        <!-- BANNER -->
-        <div id="banner" class="tab-content">
-            <div class="card">
-                <h3>Gerador de Banner</h3>
-                <div class="grid-2">
-                    <div class="form-group"><label>Nome do Servidor</label><input type="text" id="bn-nome" value="TV NOVA JUAREZ"></div>
-                    <div class="form-group"><label>Texto do Banner</label><input type="text" id="bn-texto" placeholder="Ex: Melhor IPTV do Brasil"></div>
-                    <div class="form-group"><label>WhatsApp</label><input type="text" id="bn-whats" placeholder="5511999999999"></div>
-                    <div class="form-group"><label>Link do Grupo</label><input type="text" id="bn-grupo" placeholder="https://chat.whatsapp.com/..."></div>
-                    <div class="form-group"><label>Cor Principal</label><input type="color" id="bn-cor" value="#ff0000"></div>
-                    <div class="form-group"><label>Cor do Fundo</label><input type="color" id="bn-bg" value="#1a1a1a"></div>
-                </div>
-                <button class="btn" onclick="gerarBanner()">🖼️ Gerar Banner</button>
-                <button class="btn btn-secondary" onclick="salvarBanner()">💾 Salvar Banner</button>
-                <div class="banner-preview" id="banner-preview">Pré-visualização do Banner</div>
-            </div>
-            <div class="card">
-                <h3>Banners Salvos (<span id="count-banners">0</span>)</h3>
-                <table><thead><tr><th>ID</th><th>Nome</th><th>Texto</th><th>WhatsApp</th><th>Ações</th></tr></thead>
-                <tbody id="lista-banners"></tbody></table>
             </div>
         </div>
 
         <!-- JOGOS -->
         <div id="jogos" class="tab-content">
             <div class="card">
-                <h3>Adicionar Jogo do Dia</h3>
+                <h3>Adicionar Jogo</h3>
                 <div class="grid-3">
                     <div class="form-group"><label>Horário</label><input type="time" id="jg-hora"></div>
-                    <div class="form-group"><label>Time A</label><input type="text" id="jg-timea" placeholder="Flamengo"></div>
-                    <div class="form-group"><label>Time B</label><input type="text" id="jg-timeb" placeholder="Palmeiras"></div>
-                    <div class="form-group"><label>Canal</label><input type="text" id="jg-canal" placeholder="Ex: ESPN"></div>
+                    <div class="form-group"><label>Time A</label><input type="text" id="jg-timea"></div>
+                    <div class="form-group"><label>Time B</label><input type="text" id="jg-timeb"></div>
+                    <div class="form-group"><label>Canal</label><input type="text" id="jg-canal"></div>
                     <div class="form-group"><label>Data</label><input type="date" id="jg-data"></div>
-                    <div class="form-group"><label>Status</label>
-                        <select id="jg-status"><option>Ao Vivo</option><option>Em Breve</option><option>Encerrado</option></select>
-                    </div>
+                    <div class="form-group"><label>Status</label><select id="jg-status"><option>Ao Vivo</option><option>Em Breve</option><option>Encerrado</option></select></div>
                 </div>
-                <button class="btn" onclick="addJogo()">⚽ Adicionar Jogo</button>
+                <button class="btn" onclick="addJogo()">⚽ Adicionar</button>
             </div>
             <div class="card">
-                <h3>Jogos Cadastrados (<span id="count-jogos">0</span>)</h3>
+                <h3>Jogos (<span id="count-jogos">0</span>)</h3>
                 <table><thead><tr><th>Data</th><th>Hora</th><th>Jogo</th><th>Canal</th><th>Status</th><th>Ações</th></tr></thead>
                 <tbody id="lista-jogos"></tbody></table>
             </div>
@@ -478,31 +563,42 @@ tr:hover { background: #1f1f1f; }
         <!-- CONFIG -->
         <div id="config" class="tab-content">
             <div class="card">
-                <h3>Configurações do Servidor</h3>
+                <h3>Configurações</h3>
                 <div class="grid-2">
                     <div class="form-group"><label>Nome do Servidor</label><input type="text" id="cfg-nome" value="TV NOVA JUAREZ"></div>
-                    <div class="form-group"><label>DNS Principal</label><input type="text" id="cfg-dns" placeholder="http://tvnovajuarez.com:8080"></div>
-                    <div class="form-group"><label>WhatsApp Suporte</label><input type="text" id="cfg-whats" placeholder="5511999999999"></div>
-                    <div class="form-group"><label>Grupo WhatsApp</label><input type="text" id="cfg-grupo" placeholder="https://chat.whatsapp.com/..."></div>
-                    <div class="form-group"><label>Canal Telegram</label><input type="text" id="cfg-telegram" placeholder="https://t.me/..."></div>
-                    <div class="form-group"><label>Loja de Apps</label><input type="text" id="cfg-loja" placeholder="http://loja.com/app.apk"></div>
+                    <div class="form-group"><label>DNS Principal</label><input type="text" id="cfg-dns"></div>
+                    <div class="form-group"><label>WhatsApp</label><input type="text" id="cfg-whats"></div>
+                    <div class="form-group"><label>Grupo</label><input type="text" id="cfg-grupo"></div>
+                    <div class="form-group"><label>Telegram</label><input type="text" id="cfg-telegram"></div>
+                    <div class="form-group"><label>Loja de Apps</label><input type="text" id="cfg-loja"></div>
                 </div>
-                <button class="btn" onclick="salvarConfig()">💾 Salvar Configurações</button>
-                <button class="btn btn-danger" onclick="limparTudo()">🗑️ Apagar TODOS os Dados</button>
+                <button class="btn" onclick="salvarConfig()">💾 Salvar</button>
+                <button class="btn btn-danger" onclick="limparTudo()">🗑️ Apagar Tudo</button>
             </div>
         </div>
 
     </main>
 </div>
 
-<!-- MODAL COPIAR DADOS -->
+<!-- MODAL COPIAR -->
 <div class="modal" id="modal-copiar">
     <div class="modal-content">
-        <h3>📋 Dados de Acesso (Copiar e Enviar)</h3>
+        <h3>📋 Dados de Acesso</h3>
         <textarea id="texto-copiar" readonly></textarea>
         <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:15px;">
             <button class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
-            <button class="btn btn-copy" onclick="copiarTexto()">📋 Copiar Texto</button>
+            <button class="btn btn-copy" onclick="copiarTexto()">📋 Copiar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL IMPORTAÇÃO -->
+<div class="modal" id="modal-import">
+    <div class="modal-content">
+        <h3 id="import-titulo">⬇️ Importando...</h3>
+        <div id="import-log" style="background:#0f0f0f; color:#0f0; padding:15px; border-radius:6px; font-family:monospace; font-size:12px; max-height:400px; overflow-y:auto;"></div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:15px;">
+            <button class="btn" onclick="fecharModalImport()">OK</button>
         </div>
     </div>
 </div>
@@ -512,70 +608,59 @@ tr:hover { background: #1f1f1f; }
 const DB = {
     canais: 'tvnj_canais', filmes: 'tvnj_filmes', series: 'tvnj_series',
     categorias: 'tvnj_categorias', servidores: 'tvnj_servidores', apps: 'tvnj_apps',
-    revendas: 'tvnj_revendas', clientes: 'tvnj_clientes', banners: 'tvnj_banners',
-    jogos: 'tvnj_jogos', config: 'tvnj_config', status: 'tvnj_status'
+    revendas: 'tvnj_revendas', clientes: 'tvnj_clientes', jogos: 'tvnj_jogos',
+    config: 'tvnj_config', status: 'tvnj_status', vendas: 'tvnj_vendas'
 };
-
-function get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); }
-function set(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function get(k) { return JSON.parse(localStorage.getItem(k) || '[]'); }
+function set(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 function getConfig() { return JSON.parse(localStorage.getItem(DB.config) || '{}'); }
-function setConfig(val) { localStorage.setItem(DB.config, JSON.stringify(val)); }
-
-// Status de funcionamento (id do item -> 'ok' | 'err' | 'loading')
+function setConfig(v) { localStorage.setItem(DB.config, JSON.stringify(v)); }
 function getStatus() { return JSON.parse(localStorage.getItem(DB.status) || '{}'); }
-function setStatusItem(tipo, id, status) {
-    const s = getStatus();
-    s[tipo + '_' + id] = status;
-    localStorage.setItem(DB.status, JSON.stringify(s));
-}
-function getStatusItem(tipo, id) { return getStatus()[tipo + '_' + id] || ''; }
+function setStatusItem(t, id, s) { const o = getStatus(); o[t+'_'+id] = s; localStorage.setItem(DB.status, JSON.stringify(o)); }
+function getStatusItem(t, id) { return getStatus()[t+'_'+id] || ''; }
 
-/* ============ CATEGORIAS PADRÃO ============ */
 function iniciarCategorias() {
-    let cat = JSON.parse(localStorage.getItem(DB.categorias) || 'null');
-    if (!cat) {
-        cat = {
-            canais: ['Esportes', 'Filmes', 'Séries', 'Infantil', 'Notícias', 'Documentários', 'Abertos'],
-            filmes: ['Ação', 'Comédia', 'Drama', 'Terror', 'Ficção', 'Romance', 'Infantil'],
-            series: ['Drama', 'Comédia', 'Ação', 'Terror', 'Anime', 'Policial']
-        };
-        localStorage.setItem(DB.categorias, JSON.stringify(cat));
+    let c = JSON.parse(localStorage.getItem(DB.categorias) || 'null');
+    if (!c) {
+        c = { canais: ['Esportes','Filmes','Séries','Infantil','Notícias','Documentários','Abertos','Variedades'],
+              filmes: ['Ação','Comédia','Drama','Terror','Ficção','Romance','Infantil'],
+              series: ['Drama','Comédia','Ação','Terror','Anime','Policial'] };
+        localStorage.setItem(DB.categorias, JSON.stringify(c));
     }
-    return cat;
+    return c;
 }
 function getCategorias() { return iniciarCategorias(); }
 function setCategorias(c) { localStorage.setItem(DB.categorias, JSON.stringify(c)); }
+function addCategoriaSeNaoExiste(tipo, nome) {
+    if (!nome) return;
+    const c = getCategorias();
+    if (!c[tipo].includes(nome)) { c[tipo].push(nome); setCategorias(c); }
+}
 
 function atualizarSelectsCategorias() {
     const cat = getCategorias();
-    const ids = ['canal-cat', 'filme-cat', 'serie-cat', 'filtro-cat-canais', 'filtro-cat-filmes', 'filtro-cat-series', 'player-categoria'];
-    ids.forEach(id => {
+    const map = { 'canal-cat':'canais','filme-cat':'filmes','serie-cat':'series','filtro-cat-canais':'canais','filtro-cat-filmes':'filmes','filtro-cat-series':'series' };
+    Object.keys(map).forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
-        const val = el.value;
-        const tipo = id.includes('canal') ? 'canais' : id.includes('filme') ? 'filmes' : id.includes('serie') ? 'series' : 'canais';
-        const lista = cat[tipo] || [];
-        const isFiltro = id.startsWith('filtro') || id === 'player-categoria';
+        const v = el.value;
+        const tipo = map[id];
+        const isFiltro = id.startsWith('filtro');
         el.innerHTML = (isFiltro ? '<option value="">Todas as categorias</option>' : '') +
-            lista.map(c => `<option value="${c}">${c}</option>`).join('');
-        if (val) el.value = val;
+            cat[tipo].map(c => `<option value="${c}">${c}</option>`).join('');
+        if (v) el.value = v;
     });
 }
 
 /* ============ LOGIN ============ */
 function fazerLogin() {
-    const user = document.getElementById('user').value;
-    const pass = document.getElementById('pass').value;
-    if (user === 'admin' && pass === 'admin') {
+    if (document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'admin') {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('panel').style.display = 'flex';
         renderTudo();
-    } else { alert('Usuário ou senha incorretos! Use admin / admin'); }
+    } else alert('Use admin / admin');
 }
-function fazerLogout() {
-    document.getElementById('panel').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-}
+function fazerLogout() { document.getElementById('panel').style.display='none'; document.getElementById('login-screen').style.display='flex'; }
 document.getElementById('pass').addEventListener('keypress', e => { if (e.key === 'Enter') fazerLogin(); });
 
 /* ============ NAVEGAÇÃO ============ */
@@ -584,33 +669,184 @@ function abrirAba(id, el) {
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
     el.classList.add('active');
-    const titulos = {dashboard:'Dashboard',player:'Player de Teste',canais:'Gerenciar Canais',filmes:'Gerenciar Filmes',series:'Gerenciar Séries',categorias:'Gerenciar Categorias',servidores:'Servidores DNS',aplicativos:'Aplicativos',revenda:'Painel de Revenda',clientes:'Painel de Clientes',banner:'Gerador de Banner',jogos:'Jogos do Dia',config:'Configurações'};
-    document.getElementById('titulo-pagina').innerText = titulos[id] || 'Painel';
+    const t = {dashboard:'Dashboard',importar:'Importar Conteúdo',player:'Player de Teste',canais:'Canais',filmes:'Filmes',series:'Séries',categorias:'Categorias',servidores:'Servidores DNS',planos:'Planos e Vendas',aplicativos:'Aplicativos',revenda:'Revenda',clientes:'Clientes',jogos:'Jogos',config:'Configurações'};
+    document.getElementById('titulo-pagina').innerText = t[id] || 'Painel';
     if (id === 'player') { atualizarSelectsCategorias(); carregarItensPlayer(); }
+    if (id === 'planos') { atualizarSelectClientes(); }
 }
 
 /* ============ CATEGORIAS ============ */
 function addCategoria() {
     const tipo = document.getElementById('cat-tipo').value;
     const nome = document.getElementById('cat-nome').value.trim();
-    if (!nome) return alert('Digite o nome da categoria!');
-    const cat = getCategorias();
-    if (cat[tipo].includes(nome)) return alert('Essa categoria já existe!');
-    cat[tipo].push(nome);
-    setCategorias(cat);
+    if (!nome) return alert('Digite o nome!');
+    const c = getCategorias();
+    if (c[tipo].includes(nome)) return alert('Já existe!');
+    c[tipo].push(nome);
+    setCategorias(c);
     document.getElementById('cat-nome').value = '';
     renderTudo();
-    alert('✅ Categoria adicionada!');
 }
 function delCategoria(tipo, nome) {
-    if (!confirm(`Excluir a categoria "${nome}"? Os itens dessa categoria NÃO serão apagados, apenas ficarão sem categoria.`)) return;
-    const cat = getCategorias();
-    cat[tipo] = cat[tipo].filter(c => c !== nome);
-    setCategorias(cat);
+    if (!confirm(`Excluir categoria "${nome}"?`)) return;
+    const c = getCategorias();
+    c[tipo] = c[tipo].filter(x => x !== nome);
+    setCategorias(c);
     renderTudo();
 }
 
-/* ============ CANAIS ============ */
+/* ============ IMPORTAR M3U ============ */
+function colarAtlasP() {
+    document.getElementById('import-m3u-url').value = 'https://atlasp.ink/get.php?username=942429611&password=733297278&type=m3u_plus&output=ts';
+}
+
+async function importarM3U() {
+    const url = document.getElementById('import-m3u-url').value.trim();
+    if (!url) return alert('Cole a URL M3U!');
+    const tipo = document.getElementById('import-m3u-tipo').value;
+    abrirModalImport('⬇️ Baixando lista M3U...');
+    logImport(`🌐 Tentando baixar: ${url}`);
+    logImport(`⏳ Aguarde...`);
+    try {
+        const resp = await fetch(url, { mode: 'cors' });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const texto = await resp.text();
+        logImport(`✅ Baixado! ${texto.length} bytes.`);
+        processarM3U(texto, tipo);
+    } catch (e) {
+        logImport(`❌ Erro CORS/HTTP: ${e.message}`);
+        logImport(`⚠️ O navegador bloqueou o acesso direto.`);
+        logImport(`💡 SOLUÇÃO: Abra a URL abaixo no navegador, copie TODO o texto (Ctrl+A, Ctrl+C) e cole na caixa "Importar Texto M3U".`);
+        logImport(`🔗 ${url}`);
+    }
+}
+
+function importarM3UTexto() {
+    const texto = document.getElementById('import-m3u-texto').value.trim();
+    if (!texto) return alert('Cole o conteúdo M3U!');
+    abrirModalImport('⬇️ Processando texto M3U...');
+    const tipo = document.getElementById('import-m3u-tipo').value;
+    processarM3U(texto, tipo);
+}
+
+function processarM3U(texto, tipoFiltro) {
+    const linhas = texto.split('\n');
+    let canais = 0, filmes = 0, series = 0;
+    let catAtual = '';
+
+    const listaC = get(DB.canais);
+    const listaF = get(DB.filmes);
+    const listaS = get(DB.series);
+
+    logImport(`📋 Total de linhas: ${linhas.length}`);
+    logImport(`⏳ Analisando conteúdo...`);
+
+    for (let i = 0; i < linhas.length; i++) {
+        const linha = linhas[i].trim();
+        if (linha.startsWith('#EXTINF')) {
+            const nome = linha.split(',').pop().trim();
+            const groupMatch = linha.match(/group-title="([^"]*)"/);
+            const logoMatch = linha.match(/tvg-logo="([^"]*)"/);
+            catAtual = groupMatch ? groupMatch[1] : 'Geral';
+            const logo = logoMatch ? logoMatch[1] : '';
+
+            if (i + 1 < linhas.length) {
+                const urlStream = linhas[i+1].trim();
+                if (!urlStream || urlStream.startsWith('#')) continue;
+
+                // Detectar tipo automático
+                let tipoItem = tipoFiltro;
+                if (tipoFiltro === 'auto') {
+                    const catLower = catAtual.toLowerCase();
+                    const nomeLower = nome.toLowerCase();
+                    if (catLower.includes('filme') || catLower.includes('movie') || catLower.includes('vod') || nomeLower.includes('(filme)')) tipoItem = 'filmes';
+                    else if (catLower.includes('serie') || catLower.includes('série') || catLower.includes('series') || catLower.includes('temporada')) tipoItem = 'series';
+                    else tipoItem = 'canais';
+                }
+
+                // Adicionar categoria
+                addCategoriaSeNaoExiste(tipoItem, catAtual);
+
+                const item = {
+                    id: Date.now() + Math.random(),
+                    nome: nome || 'Sem nome',
+                    cat: catAtual || 'Geral',
+                    url: urlStream,
+                    logo: logo
+                };
+
+                if (tipoItem === 'canais') { listaC.push(item); canais++; }
+                else if (tipoItem === 'filmes') { listaF.push(item); filmes++; }
+                else { listaS.push(item); series++; }
+            }
+        }
+    }
+
+    set(DB.canais, listaC);
+    set(DB.filmes, listaF);
+    set(DB.series, listaS);
+
+    logImport(`\n✅ IMPORTAÇÃO CONCLUÍDA!`);
+    logImport(`📺 Canais: ${canais}`);
+    logImport(`🎬 Filmes: ${filmes}`);
+    logImport(`📽️ Séries: ${series}`);
+    logImport(`\n💾 Tudo salvo permanentemente!`);
+
+    renderTudo();
+}
+
+/* ============ IMPORTAR YOUTUBE ============ */
+function importarYouTube() {
+    const url = document.getElementById('import-yt-url').value.trim();
+    const nome = document.getElementById('import-yt-nome').value.trim();
+    const cat = document.getElementById('import-yt-cat').value.trim() || 'YouTube';
+    const tipo = document.getElementById('import-yt-tipo').value;
+    if (!url || !nome) return alert('Preencha URL e Nome!');
+
+    const id = extrairYouTubeID(url);
+    if (!id) return alert('URL do YouTube inválida!');
+
+    // URL embed para tocar no navegador
+    const urlEmbed = `https://www.youtube.com/embed/${id}`;
+
+    addCategoriaSeNaoExiste(tipo, cat);
+    const lista = get(DB[tipo]);
+    lista.push({ id: Date.now(), nome, cat, url: urlEmbed, youtube: true, logo: `https://img.youtube.com/vi/${id}/mqdefault.jpg` });
+    set(DB[tipo], lista);
+
+    document.getElementById('import-yt-url').value = '';
+    document.getElementById('import-yt-nome').value = '';
+    renderTudo();
+    alert('✅ YouTube adicionado com sucesso!');
+}
+
+function extrairYouTubeID(url) {
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+    ];
+    for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
+    return null;
+}
+
+/* ============ IMPORTAR URL DIRETA ============ */
+function importarUrlDireta() {
+    const url = document.getElementById('import-url-dir').value.trim();
+    const nome = document.getElementById('import-nome-dir').value.trim();
+    const cat = document.getElementById('import-cat-dir').value.trim() || 'Geral';
+    const tipo = document.getElementById('import-tipo-dir').value;
+    if (!url || !nome) return alert('Preencha URL e Nome!');
+    addCategoriaSeNaoExiste(tipo, cat);
+    const lista = get(DB[tipo]);
+    lista.push({ id: Date.now(), nome, cat, url, logo: '' });
+    set(DB[tipo], lista);
+    document.getElementById('import-url-dir').value = '';
+    document.getElementById('import-nome-dir').value = '';
+    renderTudo();
+    alert('✅ URL adicionada!');
+}
+
+/* ============ ADD MANUAL ============ */
 function addCanal() {
     const nome = document.getElementById('canal-nome').value.trim();
     const cat = document.getElementById('canal-cat').value;
@@ -622,94 +858,197 @@ function addCanal() {
     set(DB.canais, lista);
     document.getElementById('canal-nome').value = '';
     document.getElementById('canal-url').value = '';
-    document.getElementById('canal-logo').value = '';
-    renderTudo();
-    alert('✅ Canal salvo!');
-}
-function delCanal(id) {
-    if (!confirm('Excluir este canal?')) return;
-    set(DB.canais, get(DB.canais).filter(c => c.id !== id));
     renderTudo();
 }
-
-/* ============ FILMES ============ */
 function addFilme() {
     const nome = document.getElementById('filme-nome').value.trim();
     const cat = document.getElementById('filme-cat').value;
     const url = document.getElementById('filme-url').value.trim();
-    const capa = document.getElementById('filme-capa').value.trim();
-    if (!nome || !url) return alert('Preencha Título e URL!');
+    if (!nome || !url) return alert('Preencha!');
     const lista = get(DB.filmes);
-    lista.push({ id: Date.now(), nome, cat, url, capa });
+    lista.push({ id: Date.now(), nome, cat, url });
     set(DB.filmes, lista);
     document.getElementById('filme-nome').value = '';
     document.getElementById('filme-url').value = '';
     renderTudo();
-    alert('✅ Filme salvo!');
 }
-function delFilme(id) {
-    if (!confirm('Excluir este filme?')) return;
-    set(DB.filmes, get(DB.filmes).filter(f => f.id !== id));
-    renderTudo();
-}
-
-/* ============ SÉRIES ============ */
 function addSerie() {
     const nome = document.getElementById('serie-nome').value.trim();
     const temp = document.getElementById('serie-temp').value;
     const ep = document.getElementById('serie-ep').value;
     const cat = document.getElementById('serie-cat').value;
     const url = document.getElementById('serie-url').value.trim();
-    if (!nome || !url) return alert('Preencha Título e URL!');
+    if (!nome || !url) return alert('Preencha!');
     const lista = get(DB.series);
     lista.push({ id: Date.now(), nome, temp, ep, cat, url });
     set(DB.series, lista);
     document.getElementById('serie-nome').value = '';
     document.getElementById('serie-url').value = '';
     renderTudo();
-    alert('✅ Série salva!');
-}
-function delSerie(id) {
-    if (!confirm('Excluir esta série?')) return;
-    set(DB.series, get(DB.series).filter(s => s.id !== id));
-    renderTudo();
 }
 
-/* ============ MARCAR / DESMARCAR / EXCLUIR MASSIVO ============ */
-function marcarTodos(tipo, marcar) {
+function delCanal(id) { if (!confirm('Excluir?')) return; set(DB.canais, get(DB.canais).filter(c => c.id !== id)); renderTudo(); }
+function delFilme(id) { if (!confirm('Excluir?')) return; set(DB.filmes, get(DB.filmes).filter(c => c.id !== id)); renderTudo(); }
+function delSerie(id) { if (!confirm('Excluir?')) return; set(DB.series, get(DB.series).filter(c => c.id !== id)); renderTudo(); }
+
+/* ============ MASSIVO ============ */
+function marcarTodos(tipo, m) {
     const lista = get(DB[tipo]);
     const filtroCat = document.getElementById('filtro-cat-' + tipo).value;
     const busca = (document.getElementById('busca-' + tipo).value || '').toLowerCase();
-    lista.forEach(item => {
-        if (filtroCat && item.cat !== filtroCat) return;
-        if (busca && !item.nome.toLowerCase().includes(busca)) return;
-        const chk = document.getElementById('chk-' + tipo + '-' + item.id);
-        if (chk) chk.checked = marcar;
+    lista.forEach(i => {
+        if (filtroCat && i.cat !== filtroCat) return;
+        if (busca && !i.nome.toLowerCase().includes(busca)) return;
+        const chk = document.getElementById('chk-' + tipo + '-' + i.id);
+        if (chk) chk.checked = m;
     });
 }
 function excluirMarcados(tipo) {
     const lista = get(DB[tipo]);
-    const marcados = lista.filter(item => {
-        const chk = document.getElementById('chk-' + tipo + '-' + item.id);
-        return chk && chk.checked;
-    });
-    if (marcados.length === 0) return alert('Nenhum item marcado!');
-    if (!confirm(`Excluir ${marcados.length} item(ns) marcado(s)?`)) return;
-    const ids = marcados.map(m => m.id);
-    set(DB[tipo], lista.filter(item => !ids.includes(item.id)));
+    const ids = lista.filter(i => { const c = document.getElementById('chk-' + tipo + '-' + i.id); return c && c.checked; }).map(i => i.id);
+    if (!ids.length) return alert('Nada marcado!');
+    if (!confirm(`Excluir ${ids.length} item(ns)?`)) return;
+    set(DB[tipo], lista.filter(i => !ids.includes(i.id)));
     renderTudo();
-    alert(`🗑️ ${ids.length} item(ns) excluído(s)!`);
 }
 function excluirCategoria(tipo) {
     const cat = document.getElementById('filtro-cat-' + tipo).value;
-    if (!cat) return alert('Selecione uma categoria no filtro primeiro!');
+    if (!cat) return alert('Selecione uma categoria no filtro!');
     const lista = get(DB[tipo]);
-    const itensCat = lista.filter(i => i.cat === cat);
-    if (itensCat.length === 0) return alert('Não há itens nessa categoria.');
-    if (!confirm(`Excluir TODOS os ${itensCat.length} itens da categoria "${cat}"?`)) return;
+    const n = lista.filter(i => i.cat === cat).length;
+    if (!n) return alert('Categoria vazia.');
+    if (!confirm(`Excluir ${n} itens da categoria "${cat}"?`)) return;
     set(DB[tipo], lista.filter(i => i.cat !== cat));
     renderTudo();
-    alert(`🗑️ Categoria "${cat}" esvaziada!`);
+}
+function excluirTodos(tipo) {
+    const lista = get(DB[tipo]);
+    if (!lista.length) return alert('Nada para excluir.');
+    if (!confirm(`⚠️ Excluir TODOS os ${lista.length} itens de ${tipo}?`)) return;
+    if (!confirm('TEM CERTEZA? Não pode desfazer!')) return;
+    set(DB[tipo], []);
+    renderTudo();
+}
+
+/* ============ PLAYER ============ */
+let playerLista = [], playerIndex = 0, playerTipoAtual = 'canais';
+
+function carregarItensPlayer() {
+    const tipo = document.getElementById('player-tipo').value;
+    playerTipoAtual = tipo;
+    const cat = getCategorias();
+    const selCat = document.getElementById('player-categoria');
+    const v = selCat.value;
+    selCat.innerHTML = '<option value="">Todas as Categorias</option>' + cat[tipo].map(c => `<option value="${c}">${c}</option>`).join('');
+    if (v) selCat.value = v;
+
+    const filtro = selCat.value;
+    playerLista = get(DB[tipo]).filter(i => !filtro || i.cat === filtro);
+    playerIndex = 0;
+
+    const selItem = document.getElementById('player-item');
+    selItem.innerHTML = '<option value="">Selecione um item...</option>' +
+        playerLista.map((i, idx) => `<option value="${idx}">${i.nome}${i.cat?' • '+i.cat:''}</option>`).join('');
+
+    document.getElementById('player-nome').innerText = 'Nenhum item selecionado';
+    document.getElementById('player-status').innerText = 'Aguardando...';
+    document.getElementById('player-status').className = 'status';
+    document.getElementById('player-wrapper').innerHTML = '<video id="video-player" controls></video>';
+}
+
+function tocarItemAtual() {
+    const sel = document.getElementById('player-item').value;
+    if (sel === '') return alert('Selecione um item!');
+    tocarIndex(parseInt(sel));
+}
+
+function tocarIndex(i) {
+    if (!playerLista.length) return;
+    if (i < 0) i = 0;
+    if (i >= playerLista.length) i = playerLista.length - 1;
+    playerIndex = i;
+    const item = playerLista[i];
+    document.getElementById('player-item').value = i;
+    document.getElementById('player-nome').innerText = `${item.nome} ${item.cat ? '• ' + item.cat : ''}`;
+
+    const wrapper = document.getElementById('player-wrapper');
+    const status = document.getElementById('player-status');
+    status.innerText = '⏳ Carregando...';
+    status.className = 'status status-load';
+
+    // YouTube?
+    if (item.youtube || item.url.includes('youtube.com/embed') || item.url.includes('youtu.be')) {
+        let vid = item.url;
+        if (!vid.includes('/embed/')) {
+            const id = extrairYouTubeID(vid);
+            if (id) vid = `https://www.youtube.com/embed/${id}`;
+        }
+        wrapper.innerHTML = `<iframe src="${vid}" allowfullscreen></iframe>`;
+        setTimeout(() => {
+            status.innerText = '✅ FUNCIONANDO';
+            status.className = 'status status-ok';
+            setStatusItem(playerTipoAtual, item.id, 'ok');
+        }, 1500);
+        return;
+    }
+
+    // Vídeo normal
+    wrapper.innerHTML = '<video id="video-player" controls></video>';
+    const video = document.getElementById('video-player');
+    video.src = item.url;
+
+    video.oncanplay = () => {
+        status.innerText = '✅ FUNCIONANDO';
+        status.className = 'status status-ok';
+        setStatusItem(playerTipoAtual, item.id, 'ok');
+    };
+    video.onerror = () => {
+        status.innerText = '❌ NÃO FUNCIONA (pode ser TS/IPTV - só em apps)';
+        status.className = 'status status-err';
+        setStatusItem(playerTipoAtual, item.id, 'err');
+    };
+    video.play().catch(() => {
+        setTimeout(() => {
+            if (video.readyState === 0) {
+                status.innerText = '❌ NÃO FUNCIONA';
+                status.className = 'status status-err';
+                setStatusItem(playerTipoAtual, item.id, 'err');
+            }
+        }, 4000);
+    });
+}
+function proximoItem() { if (!playerLista.length) return; tocarIndex(playerIndex + 1); }
+function itemAnterior() { if (!playerLista.length) return; tocarIndex(playerIndex - 1); }
+
+async function testarTodos() {
+    if (!playerLista.length) return alert('Nada para testar!');
+    if (!confirm(`Testar ${playerLista.length} itens?`)) return;
+    const r = document.getElementById('resultado-testes');
+    r.innerHTML = '<p>⏳ Testando...</p>';
+    let ok = 0, err = 0;
+    const html = [];
+    for (let i = 0; i < playerLista.length; i++) {
+        const item = playerLista[i];
+        const s = await testarUrl(item.url, item.youtube);
+        if (s) { ok++; setStatusItem(playerTipoAtual, item.id, 'ok'); }
+        else { err++; setStatusItem(playerTipoAtual, item.id, 'err'); }
+        html.push(`<div style="padding:6px 0; border-bottom:1px solid #222;">${s?'✅':'❌'} <strong>${item.nome}</strong> ${item.cat?'• '+item.cat:''}</div>`);
+        r.innerHTML = `<p>⏳ ${i+1}/${playerLista.length}</p>`;
+    }
+    r.innerHTML = `<p><strong>📊 ✅ ${ok} OK | ❌ ${err} com problema</strong></p><hr style="border-color:#333; margin:10px 0;">` + html.join('');
+    renderTudo();
+}
+function testarUrl(url, isYT) {
+    return new Promise(resolve => {
+        if (isYT || url.includes('youtube.com') || url.includes('youtu.be')) return resolve(true);
+        const v = document.createElement('video');
+        v.muted = true;
+        let done = false;
+        const t = setTimeout(() => { if (!done) { done = true; v.src=''; resolve(false); } }, 5000);
+        v.oncanplay = () => { if (!done) { done = true; clearTimeout(t); v.src=''; resolve(true); } };
+        v.onerror = () => { if (!done) { done = true; clearTimeout(t); resolve(false); } };
+        v.src = url; v.load();
+    });
 }
 
 /* ============ SERVIDORES ============ */
@@ -719,31 +1058,23 @@ function addServidor() {
     const user = document.getElementById('srv-user').value.trim();
     const pass = document.getElementById('srv-pass').value.trim();
     if (!nome || !dns) return alert('Preencha Nome e DNS!');
-    const lista = get(DB.servidores);
-    const temPrincipal = lista.some(s => s.principal);
-    lista.push({ id: Date.now(), nome, dns, user, pass, status: 'Ativo', principal: !temPrincipal });
-    set(DB.servidores, lista);
+    const l = get(DB.servidores);
+    l.push({ id: Date.now(), nome, dns, user, pass, principal: !l.some(s => s.principal) });
+    set(DB.servidores, l);
     document.getElementById('srv-nome').value = '';
     document.getElementById('srv-dns').value = '';
     document.getElementById('srv-user').value = '';
     document.getElementById('srv-pass').value = '';
     renderTudo();
-    alert('✅ Servidor salvo!');
 }
-function delServidor(id) {
-    if (!confirm('Excluir este servidor?')) return;
-    set(DB.servidores, get(DB.servidores).filter(s => s.id !== id));
-    renderTudo();
-}
-function marcarPrincipal(id) {
-    const lista = get(DB.servidores).map(s => ({...s, principal: s.id === id}));
-    set(DB.servidores, lista);
-    renderTudo();
-}
+function delServidor(id) { if (!confirm('Excluir?')) return; set(DB.servidores, get(DB.servidores).filter(s => s.id !== id)); renderTudo(); }
+function marcarPrincipal(id) { set(DB.servidores, get(DB.servidores).map(s => ({...s, principal: s.id === id}))); renderTudo(); }
 function testarServidor(id) {
     const s = get(DB.servidores).find(x => x.id === id);
-    const url = `${s.dns}/get.php?username=${s.user}&password=${s.pass}&type=m3u_plus`;
-    window.open(url, '_blank');
+    const url = `${s.dns}/get.php?username=${s.user}&password=${s.pass}&type=m3u_plus&output=ts`;
+    document.getElementById('import-m3u-url').value = url;
+    const link = Array.from(document.querySelectorAll('.sidebar nav a')).find(a => a.textContent.includes('Importar'));
+    abrirAba('importar', link);
 }
 
 /* ============ APLICATIVOS ============ */
@@ -752,45 +1083,34 @@ function addApp() {
     const url = document.getElementById('app-url').value.trim();
     const plat = document.getElementById('app-plataforma').value;
     const icone = document.getElementById('app-icone').value.trim();
-    if (!nome || !url) return alert('Preencha Nome e URL!');
-    const lista = get(DB.apps);
-    lista.push({ id: Date.now(), nome, url, plat, icone });
-    set(DB.apps, lista);
+    if (!nome || !url) return alert('Preencha!');
+    const l = get(DB.apps);
+    l.push({ id: Date.now(), nome, url, plat, icone });
+    set(DB.apps, l);
     document.getElementById('app-nome').value = '';
     document.getElementById('app-url').value = '';
     renderTudo();
-    alert('✅ Aplicativo salvo!');
 }
-function delApp(id) {
-    if (!confirm('Excluir este aplicativo?')) return;
-    set(DB.apps, get(DB.apps).filter(a => a.id !== id));
-    renderTudo();
-}
+function delApp(id) { if (!confirm('Excluir?')) return; set(DB.apps, get(DB.apps).filter(a => a.id !== id)); renderTudo(); }
 
-/* ============ REVENDA ============ */
+/* ============ REVENDA / CLIENTES ============ */
 function addRevenda() {
     const nome = document.getElementById('rev-nome').value.trim();
     const user = document.getElementById('rev-user').value.trim();
     const pass = document.getElementById('rev-pass').value.trim();
     const limite = document.getElementById('rev-limite').value;
-    if (!nome || !user || !pass) return alert('Preencha Nome, Usuário e Senha!');
-    const lista = get(DB.revendas);
-    lista.push({ id: Date.now(), nome, user, pass, limite });
-    set(DB.revendas, lista);
+    if (!nome || !user || !pass) return alert('Preencha!');
+    const l = get(DB.revendas);
+    l.push({ id: Date.now(), nome, user, pass, limite });
+    set(DB.revendas, l);
     document.getElementById('rev-nome').value = '';
     document.getElementById('rev-user').value = '';
     document.getElementById('rev-pass').value = '';
     document.getElementById('rev-limite').value = '';
     renderTudo();
-    alert('✅ Revendedor salvo!');
 }
-function delRevenda(id) {
-    if (!confirm('Excluir este revendedor?')) return;
-    set(DB.revendas, get(DB.revendas).filter(r => r.id !== id));
-    renderTudo();
-}
+function delRevenda(id) { if (!confirm('Excluir?')) return; set(DB.revendas, get(DB.revendas).filter(r => r.id !== id)); renderTudo(); }
 
-/* ============ CLIENTES ============ */
 function addCliente() {
     const nome = document.getElementById('cli-nome').value.trim();
     const user = document.getElementById('cli-user').value.trim();
@@ -798,60 +1118,108 @@ function addCliente() {
     const tipo = document.getElementById('cli-tipo').value;
     const data = document.getElementById('cli-data').value;
     const whats = document.getElementById('cli-whats').value.trim();
-    if (!nome || !user || !pass) return alert('Preencha Nome, Usuário e Senha!');
-    const lista = get(DB.clientes);
-    lista.push({ id: Date.now(), nome, user, pass, tipo, data, whats });
-    set(DB.clientes, lista);
+    if (!nome || !user || !pass) return alert('Preencha!');
+    const l = get(DB.clientes);
+    l.push({ id: Date.now(), nome, user, pass, tipo, data, whats, criado: new Date().toISOString() });
+    set(DB.clientes, l);
     document.getElementById('cli-nome').value = '';
     document.getElementById('cli-user').value = '';
     document.getElementById('cli-pass').value = '';
     document.getElementById('cli-data').value = '';
     document.getElementById('cli-whats').value = '';
     renderTudo();
-    alert('✅ Cliente salvo!');
 }
-function delCliente(id) {
-    if (!confirm('Excluir este cliente?')) return;
-    set(DB.clientes, get(DB.clientes).filter(c => c.id !== id));
-    renderTudo();
+function delCliente(id) { if (!confirm('Excluir?')) return; set(DB.clientes, get(DB.clientes).filter(c => c.id !== id)); renderTudo(); }
+
+/* ============ PLANOS E VENDAS ============ */
+function atualizarSelectClientes() {
+    const sel = document.getElementById('plano-cliente');
+    const clientes = get(DB.clientes);
+    sel.innerHTML = clientes.length === 0
+        ? '<option value="">Cadastre um cliente primeiro</option>'
+        : clientes.map(c => `<option value="${c.id}">${c.nome} (${c.user})</option>`).join('');
 }
 
-/* ============ GERAR TEXTO PARA COPIAR ============ */
-function gerarTextoAcesso(pessoa, tipo) {
+function gerarTesteGratis() {
+    const senha = 'teste' + Math.floor(1000 + Math.random() * 9000);
+    const user = 'teste' + Date.now().toString().slice(-6);
+    document.getElementById('cli-nome').value = 'Teste Grátis';
+    document.getElementById('cli-user').value = user;
+    document.getElementById('cli-pass').value = senha;
+    document.getElementById('cli-tipo').value = 'Teste 6 Horas';
+    const expira = new Date();
+    expira.setHours(expira.getHours() + 6);
+    document.getElementById('cli-data').value = expira.toISOString().split('T')[0];
+    const link = Array.from(document.querySelectorAll('.sidebar nav a')).find(a => a.textContent.includes('Clientes'));
+    abrirAba('clientes', link);
+    alert(`🎁 Teste grátis pré-preenchido!\n\nUsuário: ${user}\nSenha: ${senha}\nExpira: 6 horas\n\nClique em "Criar Cliente" para confirmar.`);
+}
+
+function gerarPlano(tipo) {
+    const planos = {
+        'mensal': { nome: 'Mensal', dias: 30, tipo: 'Mensal' },
+        'anual': { nome: 'Anual', dias: 365, tipo: 'Anual' }
+    };
+    const p = planos[tipo];
+    const user = 'user' + Date.now().toString().slice(-6);
+    const senha = Math.floor(100000 + Math.random() * 900000).toString();
+    document.getElementById('cli-nome').value = 'Cliente ' + p.nome;
+    document.getElementById('cli-user').value = user;
+    document.getElementById('cli-pass').value = senha;
+    document.getElementById('cli-tipo').value = p.tipo;
+    const expira = new Date();
+    expira.setDate(expira.getDate() + p.dias);
+    document.getElementById('cli-data').value = expira.toISOString().split('T')[0];
+    const link = Array.from(document.querySelectorAll('.sidebar nav a')).find(a => a.textContent.includes('Clientes'));
+    abrirAba('clientes', link);
+    alert(`💳 Plano ${p.nome} pré-preenchido!\n\nUsuário: ${user}\nSenha: ${senha}\nExpira em: ${p.dias} dias\n\nClique em "Criar Cliente" para confirmar.`);
+}
+
+function ativarPlano(tipo) {
+    const id = document.getElementById('plano-cliente').value;
+    if (!id) return alert('Selecione um cliente!');
+    const clientes = get(DB.clientes);
+    const cli = clientes.find(c => c.id == id);
+    if (!cli) return;
+    const hoje = new Date();
+    let dias = 0;
+    let label = '';
+    if (tipo === 'teste') { dias = 0.25; label = 'Teste 6 Horas'; }
+    else if (tipo === 'mensal') { dias = 30; label = 'Mensal'; }
+    else if (tipo === 'anual') { dias = 365; label = 'Anual'; }
+    const expira = new Date(hoje.getTime() + dias * 24 * 60 * 60 * 1000);
+    cli.tipo = label;
+    cli.data = expira.toISOString().split('T')[0];
+    set(DB.clientes, clientes);
+    renderTudo();
+    alert(`✅ Plano "${label}" ativado para ${cli.nome}!\nExpira em: ${cli.data}`);
+}
+
+/* ============ GERAR TEXTO DE ACESSO ============ */
+function gerarTextoAcesso(p, tipo) {
     const cfg = getConfig();
     const servidores = get(DB.servidores);
     const apps = get(DB.apps);
-    const servidorPrincipal = servidores.find(s => s.principal) || servidores[0];
+    const sp = servidores.find(s => s.principal) || servidores[0];
     const nomeServidor = cfg.nome || 'TV NOVA JUAREZ';
-    const dns = servidorPrincipal ? servidorPrincipal.dns : (cfg.dns || 'Não configurado');
+    const dns = sp ? sp.dns : (cfg.dns || 'Não configurado');
     const whats = cfg.whats || 'Não informado';
     const grupo = cfg.grupo || 'Não informado';
-    const telegram = cfg.telegram || 'Não informado';
 
-    let texto = `╔══════════════════════════════╗\n`;
-    texto += `   🎬 ${nomeServidor.toUpperCase()} 🎬\n`;
-    texto += `   SEUS DADOS DE ACESSO\n`;
-    texto += `╚══════════════════════════════╝\n\n`;
-    texto += `👤 *Nome:* ${pessoa.nome}\n`;
-    texto += `🔑 *Usuário:* ${pessoa.user}\n`;
-    texto += `🔒 *Senha:* ${pessoa.pass}\n`;
-    if (tipo === 'cliente') {
-        texto += `📅 *Tipo:* ${pessoa.tipo || 'Mensal'}\n`;
-        if (pessoa.data) texto += `⏰ *Expira em:* ${pessoa.data}\n`;
-    } else {
-        texto += `📊 *Limite:* ${pessoa.limite || 'Ilimitado'}\n`;
-    }
-    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🌐 *SERVIDOR (DNS)*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${dns}\n\n`;
-    texto += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📱 *APLICATIVOS*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    if (apps.length === 0) texto += `Nenhum aplicativo cadastrado ainda.\n`;
-    else apps.forEach((app, i) => { texto += `${i+1}. *${app.nome}* (${app.plat})\n   🔗 ${app.url}\n`; });
-    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📞 *SUPORTE*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n💬 WhatsApp: ${whats}\n`;
-    if (grupo !== 'Não informado') texto += `👥 Grupo: ${grupo}\n`;
-    if (telegram !== 'Não informado') texto += `📢 Telegram: ${telegram}\n`;
-    texto += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚙️ *COMO CONFIGURAR*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-    texto += `1️⃣ Baixe um dos aplicativos\n2️⃣ Escolha "Adicionar Playlist"\n3️⃣ Selecione "Xtream Codes API"\n4️⃣ Cole o DNS: ${dns}\n5️⃣ Usuário: ${pessoa.user}\n6️⃣ Senha: ${pessoa.pass}\n7️⃣ Pronto! 🍿\n\n`;
-    texto += `╔══════════════════════════════╗\n   © ${nomeServidor}\n╚══════════════════════════════╝`;
-    return texto;
+    let t = `╔══════════════════════════════╗\n   🎬 ${nomeServidor.toUpperCase()} 🎬\n   SEUS DADOS DE ACESSO\n╚══════════════════════════════╝\n\n`;
+    t += `👤 *Nome:* ${p.nome}\n🔑 *Usuário:* ${p.user}\n🔒 *Senha:* ${p.pass}\n`;
+    if (tipo === 'cliente') t += `📅 *Plano:* ${p.tipo}\n⏰ *Expira:* ${p.data || 'N/A'}\n`;
+    else t += `📊 *Limite:* ${p.limite || 'Ilimitado'}\n`;
+    t += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🌐 *SERVIDOR (DNS)*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${dns}\n\n`;
+    t += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📱 *APLICATIVOS*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    if (!apps.length) t += 'Nenhum app cadastrado.\n';
+    else apps.forEach((a, i) => { t += `${i+1}. *${a.nome}* (${a.plat})\n   🔗 ${a.url}\n`; });
+    t += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📞 *SUPORTE*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n💬 WhatsApp: ${whats}\n`;
+    if (grupo !== 'Não informado') t += `👥 Grupo: ${grupo}\n`;
+    t += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚙️ *COMO CONFIGURAR*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    t += `1️⃣ Baixe um app\n2️⃣ Adicionar Playlist → Xtream Codes API\n3️⃣ DNS: ${dns}\n4️⃣ Usuário: ${p.user}\n5️⃣ Senha: ${p.pass}\n6️⃣ Pronto! 🍿\n\n`;
+    t += `╔══════════════════════════════╗\n   © ${nomeServidor}\n╚══════════════════════════════╝`;
+    return t;
 }
 function mostrarDadosCliente(id) {
     const c = get(DB.clientes).find(x => x.id === id);
@@ -865,195 +1233,43 @@ function mostrarDadosRevenda(id) {
 }
 function copiarTexto() {
     const ta = document.getElementById('texto-copiar');
-    ta.select();
-    ta.setSelectionRange(0, 99999);
-    try { document.execCommand('copy'); alert('✅ Dados copiados!'); }
-    catch(e) { navigator.clipboard.writeText(ta.value).then(()=>alert('✅ Dados copiados!')); }
+    ta.select(); ta.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); alert('✅ Copiado!'); }
+    catch(e) { navigator.clipboard.writeText(ta.value).then(() => alert('✅ Copiado!')); }
 }
 function fecharModal() { document.getElementById('modal-copiar').classList.remove('active'); }
 
-/* ============ PLAYER DE TESTE ============ */
-let playerLista = [];
-let playerIndex = 0;
-let playerTipoAtual = 'canais';
-
-function carregarItensPlayer() {
-    const tipo = document.getElementById('player-tipo').value;
-    const cat = document.getElementById('player-categoria').value;
-    playerTipoAtual = tipo;
-
-    // Atualiza categorias conforme o tipo
-    const categorias = getCategorias();
-    const selCat = document.getElementById('player-categoria');
-    const valAtual = selCat.value;
-    selCat.innerHTML = '<option value="">Todas as Categorias</option>' +
-        (categorias[tipo] || []).map(c => `<option value="${c}">${c}</option>`).join('');
-    if (valAtual) selCat.value = valAtual;
-
-    const lista = get(DB[tipo]).filter(i => !cat || i.cat === cat);
-    playerLista = lista;
-    playerIndex = 0;
-
-    const selItem = document.getElementById('player-item');
-    selItem.innerHTML = '<option value="">Selecione um item...</option>' +
-        lista.map((item, i) => `<option value="${i}">${item.nome}${item.cat ? ' ('+item.cat+')' : ''}</option>`).join('');
-
-    document.getElementById('player-nome').innerText = 'Nenhum item selecionado';
-    document.getElementById('player-status').innerText = 'Aguardando...';
-    document.getElementById('player-status').className = 'status';
-    document.getElementById('video-player').src = '';
+/* ============ MODAL IMPORT ============ */
+function abrirModalImport(titulo) {
+    document.getElementById('import-titulo').innerText = titulo;
+    document.getElementById('import-log').innerHTML = '';
+    document.getElementById('modal-import').classList.add('active');
 }
-
-function tocarItemAtual() {
-    const sel = document.getElementById('player-item').value;
-    if (sel === '') { alert('Selecione um item!'); return; }
-    playerIndex = parseInt(sel);
-    tocarIndex(playerIndex);
+function logImport(msg) {
+    const log = document.getElementById('import-log');
+    log.innerHTML += msg.replace(/\n/g, '<br>') + '<br>';
+    log.scrollTop = log.scrollHeight;
 }
-
-function tocarIndex(i) {
-    if (playerLista.length === 0) return;
-    if (i < 0) i = 0;
-    if (i >= playerLista.length) i = playerLista.length - 1;
-    playerIndex = i;
-
-    const item = playerLista[i];
-    document.getElementById('player-item').value = i;
-    document.getElementById('player-nome').innerText = `${item.nome} ${item.cat ? '• '+item.cat : ''}`;
-
-    const video = document.getElementById('video-player');
-    const status = document.getElementById('player-status');
-    video.src = item.url;
-    status.innerText = '⏳ Carregando...';
-    status.className = 'status status-load';
-
-    // Listeners de status
-    video.oncanplay = () => {
-        status.innerText = '✅ FUNCIONANDO';
-        status.className = 'status status-ok';
-        setStatusItem(playerTipoAtual, item.id, 'ok');
-    };
-    video.onerror = () => {
-        status.innerText = '❌ NÃO FUNCIONA';
-        status.className = 'status status-err';
-        setStatusItem(playerTipoAtual, item.id, 'err');
-    };
-
-    video.play().catch(() => {
-        // Se não conseguir autoplay, marca como erro só se realmente falhar
-        setTimeout(() => {
-            if (video.readyState === 0) {
-                status.innerText = '❌ NÃO FUNCIONA';
-                status.className = 'status status-err';
-                setStatusItem(playerTipoAtual, item.id, 'err');
-            }
-        }, 4000);
-    });
-}
-
-function proximoItem() {
-    if (playerLista.length === 0) return alert('Nenhum item na lista!');
-    tocarIndex(playerIndex + 1);
-}
-function itemAnterior() {
-    if (playerLista.length === 0) return alert('Nenhum item na lista!');
-    tocarIndex(playerIndex - 1);
-}
-
-async function testarTodos() {
-    if (playerLista.length === 0) return alert('Nenhum item para testar!');
-    if (!confirm(`Testar ${playerLista.length} itens? Isso pode demorar.`)) return;
-
-    const resultado = document.getElementById('resultado-testes');
-    resultado.innerHTML = '<p>⏳ Testando itens...</p>';
-    let ok = 0, err = 0;
-    const listaHtml = [];
-
-    for (let i = 0; i < playerLista.length; i++) {
-        const item = playerLista[i];
-        const status = await testarUrl(item.url);
-        if (status) { ok++; setStatusItem(playerTipoAtual, item.id, 'ok'); }
-        else { err++; setStatusItem(playerTipoAtual, item.id, 'err'); }
-        listaHtml.push(`<div style="padding:6px 0; border-bottom:1px solid #222;">${status ? '✅' : '❌'} <strong>${item.nome}</strong> ${item.cat ? '• '+item.cat : ''}</div>`);
-        resultado.innerHTML = `<p>⏳ Testando... ${i+1}/${playerLista.length}</p>`;
-    }
-
-    resultado.innerHTML = `<p><strong>📊 Resultado:</strong> ✅ ${ok} funcionando | ❌ ${err} com problema</p><hr style="border-color:#333; margin:10px 0;">` + listaHtml.join('');
-    renderTudo(); // atualiza status nas tabelas
-}
-
-function testarUrl(url) {
-    return new Promise(resolve => {
-        const video = document.createElement('video');
-        video.muted = true;
-        let resolvido = false;
-        const timeout = setTimeout(() => {
-            if (!resolvido) { resolvido = true; video.src = ''; resolve(false); }
-        }, 5000);
-        video.oncanplay = () => { if (!resolvido) { resolvido = true; clearTimeout(timeout); video.src=''; resolve(true); } };
-        video.onerror = () => { if (!resolvido) { resolvido = true; clearTimeout(timeout); resolve(false); } };
-        video.src = url;
-        video.load();
-    });
-}
-
-/* ============ BANNER ============ */
-function gerarBanner() {
-    const nome = document.getElementById('bn-nome').value;
-    const texto = document.getElementById('bn-texto').value;
-    const whats = document.getElementById('bn-whats').value;
-    const cor = document.getElementById('bn-cor').value;
-    const bg = document.getElementById('bn-bg').value;
-    const preview = document.getElementById('banner-preview');
-    preview.style.background = bg;
-    preview.style.borderColor = cor;
-    preview.innerHTML = `<div style="color:${cor}; font-size:20px; font-weight:bold;">${nome}</div>
-        <div style="color:#fff; font-size:14px; margin-top:8px;">${texto}</div>
-        <div style="color:${cor}; font-size:12px; margin-top:8px;">📞 ${whats}</div>`;
-}
-function salvarBanner() {
-    const nome = document.getElementById('bn-nome').value;
-    const texto = document.getElementById('bn-texto').value;
-    const whats = document.getElementById('bn-whats').value;
-    const grupo = document.getElementById('bn-grupo').value;
-    const cor = document.getElementById('bn-cor').value;
-    const bg = document.getElementById('bn-bg').value;
-    if (!nome) return alert('Preencha o nome do servidor!');
-    const lista = get(DB.banners);
-    lista.push({ id: Date.now(), nome, texto, whats, grupo, cor, bg });
-    set(DB.banners, lista);
-    renderTudo();
-    alert('✅ Banner salvo!');
-}
-function delBanner(id) {
-    if (!confirm('Excluir este banner?')) return;
-    set(DB.banners, get(DB.banners).filter(b => b.id !== id));
-    renderTudo();
-}
+function fecharModalImport() { document.getElementById('modal-import').classList.remove('active'); }
 
 /* ============ JOGOS ============ */
 function addJogo() {
     const hora = document.getElementById('jg-hora').value;
-    const timea = document.getElementById('jg-timea').value.trim();
-    const timeb = document.getElementById('jg-timeb').value.trim();
+    const ta = document.getElementById('jg-timea').value.trim();
+    const tb = document.getElementById('jg-timeb').value.trim();
     const canal = document.getElementById('jg-canal').value.trim();
     const data = document.getElementById('jg-data').value;
     const status = document.getElementById('jg-status').value;
-    if (!timea || !timeb) return alert('Preencha os dois times!');
-    const lista = get(DB.jogos);
-    lista.push({ id: Date.now(), hora, timea, timeb, canal, data, status });
-    set(DB.jogos, lista);
+    if (!ta || !tb) return alert('Preencha os times!');
+    const l = get(DB.jogos);
+    l.push({ id: Date.now(), hora, timea: ta, timeb: tb, canal, data, status });
+    set(DB.jogos, l);
     document.getElementById('jg-timea').value = '';
     document.getElementById('jg-timeb').value = '';
     document.getElementById('jg-canal').value = '';
     renderTudo();
-    alert('✅ Jogo salvo!');
 }
-function delJogo(id) {
-    if (!confirm('Excluir este jogo?')) return;
-    set(DB.jogos, get(DB.jogos).filter(j => j.id !== id));
-    renderTudo();
-}
+function delJogo(id) { if (!confirm('Excluir?')) return; set(DB.jogos, get(DB.jogos).filter(j => j.id !== id)); renderTudo(); }
 
 /* ============ CONFIG ============ */
 function salvarConfig() {
@@ -1065,170 +1281,144 @@ function salvarConfig() {
         telegram: document.getElementById('cfg-telegram').value,
         loja: document.getElementById('cfg-loja').value
     });
-    alert('✅ Configurações salvas!');
+    alert('✅ Salvo!');
 }
 function limparTudo() {
-    if (!confirm('⚠️ APAGAR TODOS OS DADOS? Continuar?')) return;
-    if (!confirm('TEM CERTEZA? Não pode desfazer!')) return;
+    if (!confirm('⚠️ APAGAR TUDO?')) return;
+    if (!confirm('Certeza?')) return;
     Object.values(DB).forEach(k => localStorage.removeItem(k));
-    alert('🗑️ Tudo apagado.');
     location.reload();
 }
 
-/* ============ ÍCONE DE STATUS ============ */
+/* ============ STATUS ICON ============ */
 function iconeStatus(tipo, id) {
     const s = getStatusItem(tipo, id);
-    if (s === 'ok') return '<span class="badge badge-green">✅ OK</span>';
-    if (s === 'err') return '<span class="badge badge-red">❌ Erro</span>';
-    return '<span class="badge badge-yellow">⏳ Não testado</span>';
+    if (s === 'ok') return '<span class="badge badge-green">✅</span>';
+    if (s === 'err') return '<span class="badge badge-red">❌</span>';
+    return '<span class="badge badge-yellow">⏳</span>';
 }
 
-/* ============ RENDERIZAÇÃO ============ */
+/* ============ RENDER ============ */
 function renderTudo() {
     atualizarSelectsCategorias();
-
     const cat = getCategorias();
 
-    // CANAIS
-    const canais = get(DB.canais);
-    document.getElementById('count-canais').innerText = canais.length;
-    document.getElementById('stat-canais').innerText = canais.length;
-    renderListaGenerica('canais', 'lista-canais');
+    ['canais','filmes','series'].forEach(tipo => {
+        const lista = get(DB[tipo]);
+        document.getElementById('count-' + tipo).innerText = lista.length;
+        document.getElementById('stat-' + tipo).innerText = lista.length;
+    });
 
-    // FILMES
-    const filmes = get(DB.filmes);
-    document.getElementById('count-filmes').innerText = filmes.length;
-    document.getElementById('stat-filmes').innerText = filmes.length;
-    renderListaGenerica('filmes', 'lista-filmes');
-
-    // SÉRIES
-    const series = get(DB.series);
-    document.getElementById('count-series').innerText = series.length;
-    document.getElementById('stat-series').innerText = series.length;
-    renderListaGenerica('series', 'lista-series');
-
-    // CATEGORIAS
-    document.getElementById('stat-categorias').innerText =
-        (cat.canais?.length||0) + (cat.filmes?.length||0) + (cat.series?.length||0);
-    document.getElementById('count-cat-canais').innerText = cat.canais?.length || 0;
-    document.getElementById('count-cat-filmes').innerText = cat.filmes?.length || 0;
-    document.getElementById('count-cat-series').innerText = cat.series?.length || 0;
+    document.getElementById('stat-categorias').innerText = (cat.canais?.length||0)+(cat.filmes?.length||0)+(cat.series?.length||0);
+    document.getElementById('count-cat-canais').innerText = cat.canais.length;
+    document.getElementById('count-cat-filmes').innerText = cat.filmes.length;
+    document.getElementById('count-cat-series').innerText = cat.series.length;
 
     ['canais','filmes','series'].forEach(tipo => {
-        const itensTipo = get(DB[tipo]);
-        document.getElementById('lista-cat-' + tipo).innerHTML = (cat[tipo]||[]).length === 0
-            ? '<tr><td colspan="3" style="text-align:center;color:#555;">Nenhuma categoria.</td></tr>'
+        const itens = get(DB[tipo]);
+        document.getElementById('lista-cat-' + tipo).innerHTML = cat[tipo].length === 0
+            ? '<tr><td colspan="3" style="text-align:center;color:#555;">Vazio.</td></tr>'
             : cat[tipo].map(c => {
-                const qtd = itensTipo.filter(i => i.cat === c).length;
-                return `<tr><td>${c}</td><td>${qtd}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delCategoria('${tipo}','${c}')">Excluir</button></td></tr>`;
+                const q = itens.filter(i => i.cat === c).length;
+                return `<tr><td>${c}</td><td>${q}</td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delCategoria('${tipo}','${c.replace(/'/g,"\\'")}')">X</button></td></tr>`;
             }).join('');
     });
 
-    // SERVIDORES
-    const servidores = get(DB.servidores);
-    document.getElementById('count-servidores').innerText = servidores.length;
-    document.getElementById('stat-servidores').innerText = servidores.length;
-    document.getElementById('lista-servidores').innerHTML = servidores.length === 0
-        ? '<tr><td colspan="7" style="text-align:center;color:#555;">Nenhum servidor.</td></tr>'
-        : servidores.map(s => `<tr><td>${s.id}</td><td><strong>${s.nome}</strong></td><td>${s.dns}</td><td>${s.user}</td><td>${s.pass}</td><td>${s.principal ? '<span class="badge badge-green">★ Principal</span>' : '-'}</td><td><button class="btn btn-secondary" style="padding:5px 10px;font-size:11px;" onclick="testarServidor(${s.id})">Testar</button> ${!s.principal ? `<button class="btn btn-green" style="padding:5px 10px;font-size:11px;" onclick="marcarPrincipal(${s.id})">★ Principal</button>` : ''} <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delServidor(${s.id})">Excluir</button></td></tr>`).join('');
+    renderListaGenerica('canais', 'lista-canais');
+    renderListaGenerica('filmes', 'lista-filmes');
+    renderListaGenerica('series', 'lista-series');
 
-    // APPS
+    // Servidores
+    const srv = get(DB.servidores);
+    document.getElementById('count-servidores').innerText = srv.length;
+    document.getElementById('lista-servidores').innerHTML = srv.length === 0
+        ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum.</td></tr>'
+        : srv.map(s => `<tr><td>${s.nome}</td><td>${s.dns}</td><td>${s.user}</td><td>${s.pass}</td><td>${s.principal?'<span class="badge badge-green">★</span>':'-'}</td><td><button class="btn btn-blue" style="padding:4px 8px;font-size:11px;" onclick="testarServidor(${s.id})">⬇️ Importar</button> ${!s.principal?`<button class="btn btn-green" style="padding:4px 8px;font-size:11px;" onclick="marcarPrincipal(${s.id})">★</button>`:''} <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delServidor(${s.id})">X</button></td></tr>`).join('');
+
+    // Apps
     const apps = get(DB.apps);
     document.getElementById('count-apps').innerText = apps.length;
     document.getElementById('lista-apps').innerHTML = apps.length === 0
-        ? '<tr><td colspan="5" style="text-align:center;color:#555;">Nenhum aplicativo.</td></tr>'
-        : apps.map(a => `<tr><td>${a.id}</td><td>${a.nome}</td><td>${a.plat}</td><td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.url}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delApp(${a.id})">Excluir</button></td></tr>`).join('');
+        ? '<tr><td colspan="4" style="text-align:center;color:#555;">Nenhum.</td></tr>'
+        : apps.map(a => `<tr><td>${a.nome}</td><td>${a.plat}</td><td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.url}</td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delApp(${a.id})">X</button></td></tr>`).join('');
 
-    // REVENDAS (com Copiar + Excluir)
-    const revendas = get(DB.revendas);
-    document.getElementById('count-revendas').innerText = revendas.length;
-    document.getElementById('lista-revendas').innerHTML = revendas.length === 0
-        ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum revendedor.</td></tr>'
-        : revendas.map(r => `<tr><td>${r.id}</td><td>${r.nome}</td><td>${r.user}</td><td>${r.pass}</td><td>${r.limite}</td><td><button class="btn btn-copy" style="padding:5px 10px;font-size:11px;" onclick="mostrarDadosRevenda(${r.id})">📋 Copiar</button> <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delRevenda(${r.id})">Excluir</button></td></tr>`).join('');
+    // Revendas
+    const rev = get(DB.revendas);
+    document.getElementById('count-revendas').innerText = rev.length;
+    document.getElementById('lista-revendas').innerHTML = rev.length === 0
+        ? '<tr><td colspan="5" style="text-align:center;color:#555;">Nenhum.</td></tr>'
+        : rev.map(r => `<tr><td>${r.nome}</td><td>${r.user}</td><td>${r.pass}</td><td>${r.limite}</td><td><button class="btn btn-copy" style="padding:4px 8px;font-size:11px;" onclick="mostrarDadosRevenda(${r.id})">📋 Copiar</button> <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delRevenda(${r.id})">X</button></td></tr>`).join('');
 
-    // CLIENTES (com Copiar + Excluir)
-    const clientes = get(DB.clientes);
-    document.getElementById('count-clientes').innerText = clientes.length;
-    document.getElementById('stat-clientes').innerText = clientes.length;
-    document.getElementById('lista-clientes').innerHTML = clientes.length === 0
-        ? '<tr><td colspan="7" style="text-align:center;color:#555;">Nenhum cliente.</td></tr>'
-        : clientes.map(c => `<tr><td>${c.id}</td><td>${c.nome}</td><td>${c.user}</td><td>${c.pass}</td><td>${c.tipo}</td><td>${c.data}</td><td><button class="btn btn-copy" style="padding:5px 10px;font-size:11px;" onclick="mostrarDadosCliente(${c.id})">📋 Copiar</button> <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delCliente(${c.id})">Excluir</button></td></tr>`).join('');
+    // Clientes
+    const cli = get(DB.clientes);
+    document.getElementById('count-clientes').innerText = cli.length;
+    document.getElementById('stat-clientes').innerText = cli.length;
+    document.getElementById('lista-clientes').innerHTML = cli.length === 0
+        ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum.</td></tr>'
+        : cli.map(c => `<tr><td>${c.nome}</td><td>${c.user}</td><td>${c.pass}</td><td>${c.tipo}</td><td>${c.data}</td><td><button class="btn btn-copy" style="padding:4px 8px;font-size:11px;" onclick="mostrarDadosCliente(${c.id})">📋 Copiar</button> <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delCliente(${c.id})">X</button></td></tr>`).join('');
 
-    // BANNERS
-    const banners = get(DB.banners);
-    document.getElementById('count-banners').innerText = banners.length;
-    document.getElementById('lista-banners').innerHTML = banners.length === 0
-        ? '<tr><td colspan="5" style="text-align:center;color:#555;">Nenhum banner.</td></tr>'
-        : banners.map(b => `<tr><td>${b.id}</td><td>${b.nome}</td><td>${b.texto}</td><td>${b.whats}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delBanner(${b.id})">Excluir</button></td></tr>`).join('');
+    // Jogos
+    const jg = get(DB.jogos);
+    document.getElementById('count-jogos').innerText = jg.length;
+    document.getElementById('lista-jogos').innerHTML = jg.length === 0
+        ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum.</td></tr>'
+        : jg.map(j => `<tr><td>${j.data||'-'}</td><td>${j.hora||'-'}</td><td>${j.timea} x ${j.timeb}</td><td>${j.canal}</td><td>${j.status}</td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="delJogo(${j.id})">X</button></td></tr>`).join('');
 
-    // JOGOS
-    const jogos = get(DB.jogos);
-    document.getElementById('count-jogos').innerText = jogos.length;
-    document.getElementById('lista-jogos').innerHTML = jogos.length === 0
-        ? '<tr><td colspan="6" style="text-align:center;color:#555;">Nenhum jogo.</td></tr>'
-        : jogos.map(j => `<tr><td>${j.data||'-'}</td><td>${j.hora||'-'}</td><td>${j.timea} x ${j.timeb}</td><td>${j.canal}</td><td>${j.status}</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="delJogo(${j.id})">Excluir</button></td></tr>`).join('');
-
-    // CONFIG
+    // Config
     const cfg = getConfig();
-    if (cfg.nome) document.getElementById('cfg-nome').value = cfg.nome;
-    if (cfg.dns) document.getElementById('cfg-dns').value = cfg.dns;
-    if (cfg.whats) document.getElementById('cfg-whats').value = cfg.whats;
-    if (cfg.grupo) document.getElementById('cfg-grupo').value = cfg.grupo;
-    if (cfg.telegram) document.getElementById('cfg-telegram').value = cfg.telegram;
-    if (cfg.loja) document.getElementById('cfg-loja').value = cfg.loja;
+    ['nome','dns','whats','grupo','telegram','loja'].forEach(k => {
+        const el = document.getElementById('cfg-' + k);
+        if (el && cfg[k]) el.value = cfg[k];
+    });
+
+    document.getElementById('stat-vendas').innerText = cli.filter(c => c.tipo && c.tipo !== 'Teste').length;
+
+    atualizarSelectClientes();
 }
 
-/* Renderização genérica para canais, filmes e séries */
 function renderListaGenerica(tipo, tbodyId) {
     const lista = get(DB[tipo]);
-    const filtroCat = document.getElementById('filtro-cat-' + tipo)?.value || '';
+    const fCat = document.getElementById('filtro-cat-' + tipo)?.value || '';
     const busca = (document.getElementById('busca-' + tipo)?.value || '').toLowerCase();
-    const filtrados = lista.filter(i => {
-        if (filtroCat && i.cat !== filtroCat) return false;
+    const filt = lista.filter(i => {
+        if (fCat && i.cat !== fCat) return false;
         if (busca && !i.nome.toLowerCase().includes(busca)) return false;
         return true;
     });
-    const tbody = document.getElementById(tbodyId);
-    if (filtrados.length === 0) {
-        const colSpan = tipo === 'series' ? 9 : 7;
-        tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align:center;color:#555;">Nenhum item.</td></tr>`;
-        return;
-    }
-    tbody.innerHTML = filtrados.map(item => {
-        const chkId = 'chk-' + tipo + '-' + item.id;
-        const colsExtra = tipo === 'series' ? `<td>${item.temp||'-'}</td><td>${item.ep||'-'}</td>` : '';
+    const tb = document.getElementById(tbodyId);
+    const cols = tipo === 'series' ? 8 : 6;
+    if (!filt.length) { tb.innerHTML = `<tr><td colspan="${cols}" style="text-align:center;color:#555;">Nenhum.</td></tr>`; return; }
+    tb.innerHTML = filt.map(i => {
+        const chk = 'chk-' + tipo + '-' + i.id;
+        const extra = tipo === 'series' ? `<td>${i.temp||'-'}</td><td>${i.ep||'-'}</td>` : '';
         return `<tr>
-            <td><input type="checkbox" id="${chkId}"></td>
-            <td>${item.id}</td>
-            <td>${item.nome}</td>
-            ${colsExtra}
-            <td>${item.cat || '-'}</td>
-            <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.url}</td>
-            <td>${iconeStatus(tipo, item.id)}</td>
+            <td><input type="checkbox" id="${chk}"></td>
+            <td>${i.nome}</td>
+            ${extra}
+            <td>${i.cat||'-'}</td>
+            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.url}</td>
+            <td>${iconeStatus(tipo, i.id)}</td>
             <td>
-                <button class="btn btn-blue" style="padding:5px 10px;font-size:11px;" onclick="tocarItemRapido('${tipo}', ${item.id})">▶️ Testar</button>
-                <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" onclick="del${tipo.charAt(0).toUpperCase()+tipo.slice(1,-1)}(${item.id})">Excluir</button>
+                <button class="btn btn-blue" style="padding:4px 8px;font-size:11px;" onclick="tocarRapido('${tipo}',${i.id})">▶️</button>
+                <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="del${tipo.charAt(0).toUpperCase()+tipo.slice(1,-1)}(${i.id})">X</button>
             </td>
         </tr>`;
     }).join('');
 }
-
 function delCanais(id) { delCanal(id); }
 function delFilmes(id) { delFilme(id); }
 function delSeries(id) { delSerie(id); }
 
-/* Tocar item direto da tabela */
-function tocarItemRapido(tipo, id) {
-    // Vai para a aba do player
-    const linkPlayer = Array.from(document.querySelectorAll('.sidebar nav a')).find(a => a.textContent.includes('Player'));
-    abrirAba('player', linkPlayer);
+function tocarRapido(tipo, id) {
+    const link = Array.from(document.querySelectorAll('.sidebar nav a')).find(a => a.textContent.includes('Player'));
+    abrirAba('player', link);
     document.getElementById('player-tipo').value = tipo;
     carregarItensPlayer();
     const idx = playerLista.findIndex(i => i.id === id);
     if (idx >= 0) { document.getElementById('player-item').value = idx; tocarIndex(idx); }
 }
 
-/* ============ INICIALIZAÇÃO ============ */
+/* ============ INIT ============ */
 iniciarCategorias();
 atualizarSelectsCategorias();
 renderTudo();
